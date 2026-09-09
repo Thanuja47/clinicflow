@@ -1,0 +1,234 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  CLINIC_ADMIN
+  DOCTOR
+  RECEPTIONIST
+}
+
+enum AppointmentStatus {
+  BOOKED
+  CONFIRMED
+  CHECKED_IN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PAID
+  PARTIAL
+}
+
+enum NotificationType {
+  REMINDER
+  CONFIRMATION
+  QUEUE_UPDATE
+}
+
+enum NotificationChannel {
+  WHATSAPP
+  SMS
+}
+
+model Clinic {
+  id                    String                 @id @default(uuid())
+  name                  String
+  slug                  String                 @unique
+  address               String?
+  phone                 String?
+  logoUrl               String?
+  planTier              String                 @default("FREE")
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  branches              Branch[]
+  users                 User[]
+  patients              Patient[]
+  appointments          Appointment[]
+  visits                Visit[]
+  prescriptions         Prescription[]
+  prescriptionTemplates PrescriptionTemplate[]
+  invoices              Invoice[]
+  labReports            LabReport[]
+  notificationLogs      NotificationLog[]
+}
+
+model Branch {
+  id           String        @id @default(uuid())
+  clinicId     String
+  name         String
+  address      String?
+  phone        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  clinic       Clinic        @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  users        User[]
+  appointments Appointment[]
+}
+
+model User {
+  id                    String                 @id @default(uuid())
+  clinicId              String
+  branchId              String?
+  name                  String
+  email                 String                 @unique
+  phone                 String?
+  passwordHash          String
+  role                  Role                   @default(RECEPTIONIST)
+  isActive              Boolean                @default(true)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  clinic                Clinic                 @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  branch                Branch?                @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  doctorAppointments    Appointment[]          @relation("DoctorAppointments")
+  visits                Visit[]                @relation("DoctorVisits")
+  prescriptionTemplates PrescriptionTemplate[]
+}
+
+model Patient {
+  id               String            @id @default(uuid())
+  clinicId         String
+  fullName         String
+  nic              String?
+  phone            String
+  dob              DateTime?
+  gender           String?
+  address          String?
+  allergies        String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  clinic           Clinic            @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  appointments     Appointment[]
+  visits           Visit[]
+  invoices         Invoice[]
+  labReports       LabReport[]
+  notificationLogs NotificationLog[]
+}
+
+model Appointment {
+  id          String            @id @default(uuid())
+  clinicId    String
+  branchId    String
+  patientId   String
+  doctorId    String
+  scheduledAt DateTime
+  status      AppointmentStatus @default(BOOKED)
+  queueNumber Int
+  notes       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  clinic      Clinic            @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  branch      Branch            @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  patient     Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor      User              @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Cascade)
+  visit       Visit?
+  invoices    Invoice[]
+}
+
+model Visit {
+  id            String         @id @default(uuid())
+  clinicId      String
+  appointmentId String         @unique
+  patientId     String
+  doctorId      String
+  diagnosis     String?
+  notes         String?
+  visitDate     DateTime       @default(now())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  clinic        Clinic         @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  appointment   Appointment    @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  patient       Patient        @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor        User           @relation("DoctorVisits", fields: [doctorId], references: [id], onDelete: Cascade)
+  prescriptions Prescription[]
+  labReports    LabReport[]
+}
+
+model Prescription {
+  id           String   @id @default(uuid())
+  clinicId     String
+  visitId      String
+  medicineName String
+  dosage       String
+  duration     String
+  instructions String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  clinic       Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  visit        Visit    @relation(fields: [visitId], references: [id], onDelete: Cascade)
+}
+
+model PrescriptionTemplate {
+  id        String   @id @default(uuid())
+  clinicId  String
+  doctorId  String
+  name      String
+  itemsJson String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  clinic    Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  doctor    User     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+}
+
+model Invoice {
+  id              String        @id @default(uuid())
+  clinicId        String
+  patientId       String
+  appointmentId  String?
+  consultationFee Float         @default(0.0)
+  labCharges      Float         @default(0.0)
+  otherCharges    Float         @default(0.0)
+  totalAmount     Float         @default(0.0)
+  status          InvoiceStatus @default(UNPAID)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  clinic          Clinic        @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  patient         Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  appointment     Appointment?  @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+}
+
+model LabReport {
+  id         String   @id @default(uuid())
+  clinicId   String
+  patientId  String
+  visitId    String?
+  fileUrl    String
+  uploadedAt DateTime @default(now())
+
+  clinic     Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  patient    Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  visit      Visit?   @relation(fields: [visitId], references: [id], onDelete: SetNull)
+}
+
+model NotificationLog {
+  id        String              @id @default(uuid())
+  clinicId  String
+  patientId String?
+  type      NotificationType
+  channel   NotificationChannel @default(WHATSAPP)
+  status    String
+  sentAt    DateTime            @default(now())
+
+  clinic    Clinic              @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  patient   Patient?            @relation(fields: [patientId], references: [id], onDelete: SetNull)
+}
