@@ -8,27 +8,41 @@ export default async function AdminOverviewPage() {
   const session = getSessionUser();
   if (!session) return null;
 
-  const [branchesCount, staffCount, patientsCount, todayAppointmentsCount] = await Promise.all([
-    prisma.branch.count({ where: { clinicId: session.clinicId } }),
-    prisma.user.count({ where: { clinicId: session.clinicId } }),
-    prisma.patient.count({ where: { clinicId: session.clinicId } }),
-    prisma.appointment.count({
-      where: {
-        clinicId: session.clinicId,
-        scheduledAt: {
-          gte: new Date(new Date().setHours(0, 0, 0, 0)),
-          lt: new Date(new Date().setHours(23, 59, 59, 999)),
-        },
-      },
-    }),
-  ]);
+  let branchesCount = 0;
+  let staffCount = 0;
+  let patientsCount = 0;
+  let todayAppointmentsCount = 0;
+  let recentStaff: Array<{ id: string; name: string; email: string; role: string; createdAt: Date }> = [];
 
-  const recentStaff = await prisma.user.findMany({
-    where: { clinicId: session.clinicId },
-    take: 5,
-    orderBy: { createdAt: 'desc' },
-    select: { id: true, name: true, email: true, role: true, createdAt: true },
-  });
+  try {
+    const [bCount, sCount, pCount, aCount] = await Promise.all([
+      prisma.branch.count({ where: { clinicId: session.clinicId } }),
+      prisma.user.count({ where: { clinicId: session.clinicId } }),
+      prisma.patient.count({ where: { clinicId: session.clinicId } }),
+      prisma.appointment.count({
+        where: {
+          clinicId: session.clinicId,
+          scheduledAt: {
+            gte: new Date(new Date().setHours(0, 0, 0, 0)),
+            lt: new Date(new Date().setHours(23, 59, 59, 999)),
+          },
+        },
+      }),
+    ]);
+    branchesCount = bCount;
+    staffCount = sCount;
+    patientsCount = pCount;
+    todayAppointmentsCount = aCount;
+
+    recentStaff = await prisma.user.findMany({
+      where: { clinicId: session.clinicId },
+      take: 5,
+      orderBy: { createdAt: 'desc' },
+      select: { id: true, name: true, email: true, role: true, createdAt: true },
+    });
+  } catch (err) {
+    console.error('Prisma query skipped in admin overview page:', err);
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
