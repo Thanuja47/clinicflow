@@ -1,6 +1,4 @@
 'use client';
-export const dynamic = 'force-dynamic';
-
 import { useState, useEffect, useCallback } from 'react';
 import { Users, RefreshCw, Stethoscope, CheckCircle, AlertCircle } from 'lucide-react';
 
