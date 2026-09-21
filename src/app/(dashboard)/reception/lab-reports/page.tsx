@@ -50,9 +50,10 @@ export default function LabReportsPage() {
     }
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/patients?search=${encodeURIComponent(patientSearch)}`);
+        const res = await fetch(`/api/patients?q=${encodeURIComponent(patientSearch)}&limit=10`);
         const data = await res.json();
-        if (Array.isArray(data)) setPatientResults(data);
+        if (data?.patients && Array.isArray(data.patients)) setPatientResults(data.patients);
+        else setPatientResults([]);
       } catch (err) {
         console.error(err);
       }

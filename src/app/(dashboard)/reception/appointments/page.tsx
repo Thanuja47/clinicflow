@@ -101,9 +101,10 @@ export default function AppointmentsPage() {
     }
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/patients?search=${encodeURIComponent(searchPatient)}`);
+        const res = await fetch(`/api/patients?q=${encodeURIComponent(searchPatient)}&limit=10`);
         const data = await res.json();
-        if (Array.isArray(data)) setPatientResults(data);
+        if (data?.patients && Array.isArray(data.patients)) setPatientResults(data.patients);
+        else setPatientResults([]);
       } catch (err) {
         console.error(err);
       }

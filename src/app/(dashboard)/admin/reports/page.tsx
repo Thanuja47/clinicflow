@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
 } from 'recharts';
 import { TrendingUp, Users, Calendar, DollarSign, CheckCircle2, RefreshCw } from 'lucide-react';
 
@@ -31,6 +31,7 @@ interface DoctorPerf {
 const COLORS = ['#10b981', '#f59e0b', '#ef4444', '#3b82f6'];
 
 export default function ReportsAnalyticsPage() {
+  const [mounted, setMounted] = useState(false);
   const [period, setPeriod] = useState<'today' | 'week' | 'month' | 'all'>('month');
   const [summary, setSummary] = useState<ReportSummary>({
     totalPatients: 0,
@@ -42,6 +43,10 @@ export default function ReportsAnalyticsPage() {
   });
   const [doctorPerf, setDoctorPerf] = useState<DoctorPerf[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const fetchReports = useCallback(async () => {
     setLoading(true);
@@ -160,9 +165,9 @@ export default function ReportsAnalyticsPage() {
           </h2>
 
           <div className="h-64 w-full pt-2">
-            {doctorPerf.length === 0 ? (
+            {!mounted || doctorPerf.length === 0 ? (
               <div className="h-full flex items-center justify-center text-slate-500 text-sm">
-                No consultation data for this period.
+                {!mounted ? 'Loading chart...' : 'No consultation data for this period.'}
               </div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
@@ -188,8 +193,10 @@ export default function ReportsAnalyticsPage() {
           </h2>
 
           <div className="h-64 w-full flex items-center justify-center">
-            {appointmentPieData.length === 0 ? (
-              <div className="text-slate-500 text-sm">No appointment data to chart.</div>
+            {!mounted || appointmentPieData.length === 0 ? (
+              <div className="text-slate-500 text-sm">
+                {!mounted ? 'Loading chart...' : 'No appointment data to chart.'}
+              </div>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>

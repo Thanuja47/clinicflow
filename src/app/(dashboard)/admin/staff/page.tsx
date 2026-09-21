@@ -74,6 +74,26 @@ export default function StaffPage() {
     }
   };
 
+  const handleToggleActive = async (user: StaffUser) => {
+    setError('');
+    try {
+      const res = await fetch(`/api/staff/${user.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isActive: !user.isActive }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to update status');
+      }
+
+      fetchData();
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Topbar title="Staff Account Directory" userName="Admin" />
@@ -165,7 +185,7 @@ export default function StaffPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-sky-600 hover:bg-sky-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition"
+                className="bg-sky-600 hover:bg-sky-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition disabled:opacity-50"
               >
                 {loading ? 'Registering...' : '+ Create Account'}
               </button>
@@ -185,6 +205,7 @@ export default function StaffPage() {
                   <th className="p-3">Role</th>
                   <th className="p-3">Branch</th>
                   <th className="p-3">Status</th>
+                  <th className="p-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800">
@@ -199,9 +220,27 @@ export default function StaffPage() {
                     </td>
                     <td className="p-3 text-slate-400">{member.branch?.name || 'All Branches'}</td>
                     <td className="p-3">
-                      <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded text-[10px]">
-                        Active
-                      </span>
+                      {member.isActive ? (
+                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded text-[10px]">
+                          Active
+                        </span>
+                      ) : (
+                        <span className="bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded text-[10px]">
+                          Inactive
+                        </span>
+                      )}
+                    </td>
+                    <td className="p-3 text-right">
+                      <button
+                        onClick={() => handleToggleActive(member)}
+                        className={`text-[11px] font-medium px-2.5 py-1 rounded transition border ${
+                          member.isActive
+                            ? 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border-rose-500/30'
+                            : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                        }`}
+                      >
+                        {member.isActive ? 'Deactivate' : 'Activate'}
+                      </button>
                     </td>
                   </tr>
                 ))}

@@ -8,7 +8,7 @@ export default function SettingsPage() {
   const [phone, setPhone] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
     fetch('/api/clinics')
@@ -20,13 +20,14 @@ export default function SettingsPage() {
           setPhone(data.phone || '');
           setLogoUrl(data.logoUrl || '');
         }
-      });
+      })
+      .catch((err) => console.error('Failed to load clinic settings', err));
   }, []);
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setMessage('');
+    setStatus(null);
 
     try {
       const res = await fetch('/api/clinics', {
@@ -36,10 +37,14 @@ export default function SettingsPage() {
       });
 
       if (res.ok) {
-        setMessage('Clinic settings updated successfully!');
+        setStatus({ type: 'success', text: 'Clinic settings updated successfully!' });
+      } else {
+        const data = await res.json();
+        setStatus({ type: 'error', text: data.error || 'Failed to update settings' });
       }
-    } catch {
-      setMessage('Failed to update settings');
+    } catch (err: unknown) {
+      if (err instanceof Error) setStatus({ type: 'error', text: err.message });
+      else setStatus({ type: 'error', text: 'Failed to update settings' });
     } finally {
       setLoading(false);
     }
@@ -53,7 +58,17 @@ export default function SettingsPage() {
         <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
           <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">General Clinic Profile</h2>
 
-          {message && <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs p-3 rounded-lg">{message}</div>}
+          {status && (
+            <div
+              className={`text-xs p-3 rounded-lg border ${
+                status.type === 'success'
+                  ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                  : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+              }`}
+            >
+              {status.text}
+            </div>
+          )}
 
           <form onSubmit={handleUpdate} className="space-y-4">
             <div>
@@ -101,7 +116,7 @@ export default function SettingsPage() {
             <button
               type="submit"
               disabled={loading}
-              className="bg-sky-600 hover:bg-sky-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition"
+              className="bg-sky-600 hover:bg-sky-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition disabled:opacity-50"
             >
               {loading ? 'Saving...' : 'Save Settings'}
             </button>

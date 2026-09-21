@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Topbar } from '@/components/layout/Topbar';
+import { Edit2, Trash2 } from 'lucide-react';
 
 interface Branch {
   id: string;
@@ -18,6 +19,13 @@ export default function BranchesPage() {
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Edit Modal State
+  const [editingBranch, setEditingBranch] = useState<Branch | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editAddress, setEditAddress] = useState('');
+  const [editPhone, setEditPhone] = useState('');
+  const [savingEdit, setSavingEdit] = useState(false);
 
   const fetchBranches = async () => {
     const res = await fetch('/api/branches');
@@ -56,6 +64,60 @@ export default function BranchesPage() {
       if (err instanceof Error) setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleOpenEdit = (branch: Branch) => {
+    setEditingBranch(branch);
+    setEditName(branch.name);
+    setEditAddress(branch.address || '');
+    setEditPhone(branch.phone || '');
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingBranch) return;
+
+    setSavingEdit(true);
+    setError('');
+    try {
+      const res = await fetch(`/api/branches/${editingBranch.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: editName, address: editAddress, phone: editPhone }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to update branch');
+      }
+
+      setEditingBranch(null);
+      fetchBranches();
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
+    } finally {
+      setSavingEdit(false);
+    }
+  };
+
+  const handleDelete = async (id: string, branchName: string) => {
+    if (!confirm(`Are you sure you want to delete branch "${branchName}"?`)) return;
+
+    setError('');
+    try {
+      const res = await fetch(`/api/branches/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to delete branch');
+      }
+
+      fetchBranches();
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
     }
   };
 
@@ -105,7 +167,7 @@ export default function BranchesPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-sky-600 hover:bg-sky-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition"
+                className="bg-sky-600 hover:bg-sky-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition disabled:opacity-50"
               >
                 {loading ? 'Creating...' : '+ Add Branch'}
               </button>
@@ -121,9 +183,25 @@ export default function BranchesPage() {
               <div key={b.id} className="bg-slate-950 border border-slate-800 p-4 rounded-lg space-y-2">
                 <div className="flex justify-between items-start">
                   <h3 className="font-bold text-slate-100">{b.name}</h3>
-                  <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-mono">
-                    Active
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-mono">
+                      Active
+                    </span>
+                    <button
+                      onClick={() => handleOpenEdit(b)}
+                      className="text-slate-400 hover:text-sky-400 p-1 transition"
+                      title="Edit Branch"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(b.id, b.name)}
+                      className="text-slate-400 hover:text-rose-400 p-1 transition"
+                      title="Delete Branch"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
                 <p className="text-xs text-slate-400">{b.address || 'No address specified'}</p>
                 <p className="text-xs text-slate-400">Phone: {b.phone || 'N/A'}</p>
@@ -136,6 +214,61 @@ export default function BranchesPage() {
           </div>
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {editingBranch && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-md p-6 space-y-4">
+            <h3 className="text-base font-bold text-slate-100">Edit Branch</h3>
+            <form onSubmit={handleSaveEdit} className="space-y-4">
+              <div>
+                <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Branch Name</label>
+                <input
+                  type="text"
+                  required
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm outline-none focus:border-sky-500"
+                />
+              </div>
+              <div>
+                <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Address</label>
+                <input
+                  type="text"
+                  value={editAddress}
+                  onChange={(e) => setEditAddress(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm outline-none focus:border-sky-500"
+                />
+              </div>
+              <div>
+                <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Phone</label>
+                <input
+                  type="text"
+                  value={editPhone}
+                  onChange={(e) => setEditPhone(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm outline-none focus:border-sky-500"
+                />
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingBranch(null)}
+                  className="px-4 py-2 text-xs text-slate-400 hover:text-slate-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={savingEdit}
+                  className="bg-sky-600 hover:bg-sky-500 text-white font-medium px-4 py-2 rounded-lg text-xs transition disabled:opacity-50"
+                >
+                  {savingEdit ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
