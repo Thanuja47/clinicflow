@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Users, RefreshCw, Stethoscope, CheckCircle, AlertCircle } from 'lucide-react';
+import { Users, RefreshCw, Stethoscope, CheckCircle, AlertCircle, Activity } from 'lucide-react';
 
 interface QueueItem {
   id: string;
@@ -106,18 +106,18 @@ export default function ReceptionQueuePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
+          <h1 className="apple-title flex items-center gap-2.5">
             Live Queue Board
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-1.5" />
+            <span className="apple-pill apple-pill-green flex items-center gap-1.5 text-xs font-medium">
+              <span className="w-2 h-2 rounded-full bg-apple-green animate-pulse" />
               Live 10s Polling
             </span>
           </h1>
-          <p className="text-slate-400 text-sm">Real-time patient queue management for receptionists</p>
+          <p className="apple-caption mt-1">Real-time patient flow & queue management</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -125,12 +125,12 @@ export default function ReceptionQueuePage() {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+            className="apple-input text-xs"
           />
           <select
             value={selectedDoctor}
             onChange={(e) => setSelectedDoctor(e.target.value)}
-            className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+            className="apple-input text-xs"
           >
             <option value="">All Doctors</option>
             {doctors.map((doc) => (
@@ -141,7 +141,7 @@ export default function ReceptionQueuePage() {
           </select>
           <button
             onClick={() => fetchQueue(true)}
-            className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors"
+            className="apple-btn-secondary p-2 flex items-center justify-center"
             title="Refresh Queue"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -151,59 +151,59 @@ export default function ReceptionQueuePage() {
 
       {/* Stats Row */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-          <div className="text-xs text-slate-400 font-medium">Total Today</div>
-          <div className="text-2xl font-bold text-slate-100 mt-1">{counts.total}</div>
+        <div className="apple-card p-4">
+          <div className="apple-caption">Total today</div>
+          <div className="text-2xl font-bold text-apple-text mt-1">{counts.total}</div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-          <div className="text-xs text-blue-400 font-medium">Booked</div>
-          <div className="text-2xl font-bold text-blue-400 mt-1">{counts.booked}</div>
+        <div className="apple-card p-4">
+          <div className="apple-caption font-medium text-apple-blue">Booked</div>
+          <div className="text-2xl font-bold text-apple-blue mt-1">{counts.booked}</div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-          <div className="text-xs text-amber-400 font-medium">Waiting in Clinic</div>
-          <div className="text-2xl font-bold text-amber-400 mt-1">{counts.waiting}</div>
+        <div className="apple-card p-4">
+          <div className="apple-caption font-medium text-apple-orange">Waiting in clinic</div>
+          <div className="text-2xl font-bold text-apple-orange mt-1">{counts.waiting}</div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-          <div className="text-xs text-purple-400 font-medium">In Consultation</div>
-          <div className="text-2xl font-bold text-purple-400 mt-1">{counts.inProgress}</div>
+        <div className="apple-card p-4">
+          <div className="apple-caption font-medium text-apple-purple">In consultation</div>
+          <div className="text-2xl font-bold text-apple-purple mt-1">{counts.inProgress}</div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-          <div className="text-xs text-emerald-400 font-medium">Completed</div>
-          <div className="text-2xl font-bold text-emerald-400 mt-1">{counts.completed}</div>
+        <div className="apple-card p-4">
+          <div className="apple-caption font-medium text-apple-green">Completed</div>
+          <div className="text-2xl font-bold text-apple-green mt-1">{counts.completed}</div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-          <div className="text-xs text-rose-400 font-medium">Cancelled</div>
-          <div className="text-2xl font-bold text-rose-400 mt-1">{counts.cancelled}</div>
+        <div className="apple-card p-4">
+          <div className="apple-caption font-medium text-apple-red">Cancelled</div>
+          <div className="text-2xl font-bold text-apple-red mt-1">{counts.cancelled}</div>
         </div>
       </div>
 
       {/* Queue List Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-        <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/50">
-          <h2 className="text-base font-semibold text-slate-200 flex items-center gap-2">
-            <Users className="w-4 h-4 text-emerald-400" /> Patient Flow Sequence
+      <div className="apple-card overflow-hidden">
+        <div className="p-4 border-b border-apple-border flex justify-between items-center bg-apple-secondary/30">
+          <h2 className="text-sm font-semibold text-apple-text flex items-center gap-2">
+            <Activity className="w-4 h-4 text-apple-blue" /> Patient Sequence List
           </h2>
-          <span className="text-xs text-slate-400">
+          <span className="apple-caption text-xs">
             Ordered by Queue Number
           </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-slate-300">
-            <thead className="bg-slate-950 text-slate-400 text-xs uppercase font-semibold border-b border-slate-800">
-              <tr>
-                <th className="px-6 py-4">Q#</th>
-                <th className="px-6 py-4">Patient</th>
-                <th className="px-6 py-4">Scheduled Time</th>
-                <th className="px-6 py-4">Doctor</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Quick Actions</th>
+          <table className="w-full text-left text-sm text-apple-text">
+            <thead>
+              <tr className="border-b border-apple-border text-apple-muted text-xs font-semibold">
+                <th className="px-6 py-3.5">Q#</th>
+                <th className="px-6 py-3.5">Patient</th>
+                <th className="px-6 py-3.5">Scheduled Time</th>
+                <th className="px-6 py-3.5">Doctor</th>
+                <th className="px-6 py-3.5">Status</th>
+                <th className="px-6 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-apple-border">
               {queue.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={6} className="px-6 py-8 text-center apple-caption">
                     No appointments in queue for selected filters.
                   </td>
                 </tr>
@@ -211,47 +211,41 @@ export default function ReceptionQueuePage() {
                 queue.map((item) => (
                   <tr
                     key={item.id}
-                    className={`hover:bg-slate-800/50 transition-colors ${
-                      item.status === 'IN_PROGRESS'
-                        ? 'bg-purple-950/20'
-                        : item.status === 'CHECKED_IN'
-                        ? 'bg-amber-950/20'
-                        : ''
-                    }`}
+                    className="hover:bg-apple-secondary/40 transition-colors"
                   >
-                    <td className="px-6 py-4 font-mono font-bold text-lg text-emerald-400">
+                    <td className="px-6 py-4 font-mono font-bold text-base text-apple-blue">
                       #{item.queueNumber}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-semibold text-slate-100">{item.patient.fullName}</div>
-                      <div className="text-xs text-slate-400">{item.patient.phone}</div>
+                      <div className="font-semibold text-apple-text">{item.patient.fullName}</div>
+                      <div className="text-xs text-apple-muted">{item.patient.phone}</div>
                       {item.patient.allergies && (
-                        <span className="inline-flex items-center text-[10px] text-amber-400 bg-amber-950/50 px-1.5 py-0.5 rounded mt-1 border border-amber-500/20">
-                          <AlertCircle className="w-3 h-3 mr-1" /> Allergies: {item.patient.allergies}
+                        <span className="apple-pill apple-pill-red text-[10px] mt-1 inline-flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" /> Allergy: {item.patient.allergies}
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-slate-200">
+                    <td className="px-6 py-4 text-apple-muted text-xs">
                       {new Date(item.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </td>
-                    <td className="px-6 py-4 text-slate-300">
+                    <td className="px-6 py-4 font-medium text-apple-text text-xs">
                       Dr. {item.doctor.name}
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
+                        className={`apple-pill ${
                           item.status === 'BOOKED'
-                            ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                            ? 'apple-pill-blue'
                             : item.status === 'CHECKED_IN'
-                            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20 animate-pulse'
+                            ? 'apple-pill-orange'
                             : item.status === 'IN_PROGRESS'
-                            ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20 animate-pulse'
+                            ? 'apple-pill-purple'
                             : item.status === 'COMPLETED'
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                            ? 'apple-pill-green'
+                            : 'apple-pill-red'
                         }`}
                       >
-                        {item.status === 'CHECKED_IN' ? 'Waiting in Clinic' : item.status}
+                        {item.status === 'CHECKED_IN' ? 'Waiting' : item.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -260,7 +254,7 @@ export default function ReceptionQueuePage() {
                           <button
                             onClick={() => updateStatus(item.id, 'CHECKED_IN')}
                             disabled={updatingId === item.id}
-                            className="bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                            className="apple-btn-secondary text-xs py-1 px-3 text-apple-orange"
                           >
                             Check In
                           </button>
@@ -270,7 +264,7 @@ export default function ReceptionQueuePage() {
                           <button
                             onClick={() => updateStatus(item.id, 'IN_PROGRESS')}
                             disabled={updatingId === item.id}
-                            className="bg-purple-600 hover:bg-purple-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1"
+                            className="apple-btn-primary text-xs py-1 px-3 flex items-center gap-1"
                           >
                             <Stethoscope className="w-3.5 h-3.5" /> Call In
                           </button>
@@ -280,7 +274,7 @@ export default function ReceptionQueuePage() {
                           <button
                             onClick={() => updateStatus(item.id, 'COMPLETED')}
                             disabled={updatingId === item.id}
-                            className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1"
+                            className="apple-btn-secondary text-xs py-1 px-3 text-apple-green flex items-center gap-1"
                           >
                             <CheckCircle className="w-3.5 h-3.5" /> Complete
                           </button>
@@ -290,7 +284,7 @@ export default function ReceptionQueuePage() {
                           <button
                             onClick={() => updateStatus(item.id, 'CANCELLED')}
                             disabled={updatingId === item.id}
-                            className="bg-slate-800 hover:bg-rose-950 hover:text-rose-400 text-slate-400 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                            className="apple-btn-secondary text-xs py-1 px-2.5 text-apple-red hover:bg-apple-red/10"
                           >
                             Cancel
                           </button>

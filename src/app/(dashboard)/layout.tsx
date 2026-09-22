@@ -25,13 +25,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex">
+    <div className="min-h-screen bg-apple-bg text-apple-text flex transition-colors duration-200">
       <Sidebar
         userRole={session.role}
         userName={session.name}
         clinicName={clinicName}
       />
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      <main className="flex-1 overflow-y-auto min-w-0">{children}</main>
     </div>
   );
 }

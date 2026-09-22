@@ -1,12 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: #020617;
-  color: #f1f5f9;
+:root {
+  --bg-grouped: #F2F2F7;
+  --bg-surface: #FFFFFF;
+  --bg-surface-secondary: #F8F8FC;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-subtle-hover: rgba(0, 0, 0, 0.15);
+
+  --text-primary: #1C1C1E;
+  --text-secondary: #6E6E73;
+  --text-tertiary: #8E8E93;
+
+  --accent-blue: #007AFF;
+  --accent-blue-tint: rgba(0, 122, 255, 0.1);
+  --accent-green: #34C759;
+  --accent-green-tint: rgba(52, 199, 89, 0.12);
+  --accent-orange: #FF9500;
+  --accent-orange-tint: rgba(255, 149, 0, 0.12);
+  --accent-red: #FF3B30;
+  --accent-red-tint: rgba(255, 59, 48, 0.12);
+  --accent-purple: #AF52DE;
+  --accent-purple-tint: rgba(175, 82, 222, 0.12);
+
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.08);
 }
 
+.dark {
+  --bg-grouped: #000000;
+  --bg-surface: #1C1C1E;
+  --bg-surface-secondary: #2C2C2E;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-subtle-hover: rgba(255, 255, 255, 0.18);
+
+  --text-primary: #F5F5F7;
+  --text-secondary: #98989D;
+  --text-tertiary: #636366;
+
+  --accent-blue: #0A84FF;
+  --accent-blue-tint: rgba(10, 132, 255, 0.15);
+  --accent-green: #30D158;
+  --accent-green-tint: rgba(48, 209, 88, 0.18);
+  --accent-orange: #FF9F0A;
+  --accent-orange-tint: rgba(255, 159, 10, 0.18);
+  --accent-red: #FF453A;
+  --accent-red-tint: rgba(255, 69, 58, 0.18);
+  --accent-purple: #BF5AF2;
+  --accent-purple-tint: rgba(191, 90, 242, 0.18);
+
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg-grouped: #000000;
+    --bg-surface: #1C1C1E;
+    --bg-surface-secondary: #2C2C2E;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-subtle-hover: rgba(255, 255, 255, 0.18);
+
+    --text-primary: #F5F5F7;
+    --text-secondary: #98989D;
+    --text-tertiary: #636366;
+
+    --accent-blue: #0A84FF;
+    --accent-blue-tint: rgba(10, 132, 255, 0.15);
+    --accent-green: #30D158;
+    --accent-green-tint: rgba(48, 209, 88, 0.18);
+    --accent-orange: #FF9F0A;
+    --accent-orange-tint: rgba(255, 159, 10, 0.18);
+    --accent-red: #FF453A;
+    --accent-red-tint: rgba(255, 69, 58, 0.18);
+    --accent-purple: #BF5AF2;
+    --accent-purple-tint: rgba(191, 90, 242, 0.18);
+
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.6);
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-grouped);
+  color: var(--text-primary);
+  line-height: 1.47;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Apple Typography Utility Classes */
+.apple-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.apple-section-header {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.apple-body {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.47;
+  color: var(--text-primary);
+}
+
+.apple-caption {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* Apple Card Container */
+.apple-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.apple-card-interactive:hover {
+  border-color: var(--border-subtle-hover);
+}
+
+/* Apple Buttons */
+.apple-btn-primary {
+  background-color: var(--accent-blue);
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.apple-btn-primary:hover {
+  opacity: 0.92;
+}
+
+.apple-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.apple-btn-secondary {
+  background-color: var(--bg-surface-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.apple-btn-secondary:hover {
+  border-color: var(--border-subtle-hover);
+  background-color: var(--bg-surface);
+}
+
+/* Apple Pill Badges */
+.apple-pill {
+  display: inline-flex;
+  items-center: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.apple-pill-blue {
+  background-color: var(--accent-blue-tint);
+  color: var(--accent-blue);
+}
+
+.apple-pill-green {
+  background-color: var(--accent-green-tint);
+  color: var(--accent-green);
+}
+
+.apple-pill-orange {
+  background-color: var(--accent-orange-tint);
+  color: var(--accent-orange);
+}
+
+.apple-pill-red {
+  background-color: var(--accent-red-tint);
+  color: var(--accent-red);
+}
+
+.apple-pill-purple {
+  background-color: var(--accent-purple-tint);
+  color: var(--accent-purple);
+}
+
+/* Apple Form Inputs */
+.apple-input {
+  background-color: var(--bg-surface-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.apple-input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px var(--accent-blue-tint);
+}
+
+/* Apple Modal Overlay */
+.apple-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.apple-modal-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  box-shadow: var(--shadow-modal);
+}
+
+/* Print CSS Overrides */
 @media print {
   @page {
     size: auto;
@@ -30,7 +263,6 @@ body {
     display: block !important;
   }
 
-  /* Remove scrollbars and borders from overflow containers when printing */
   div, section, main, table {
     overflow: visible !important;
     max-height: none !important;

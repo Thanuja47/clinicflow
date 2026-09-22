@@ -96,57 +96,57 @@ export default function StaffPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Topbar title="Staff Account Directory" userName="Admin" />
+      <Topbar title="Staff Directory" userName="Admin" />
 
       <div className="p-6 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">Create Staff Account (Doctor / Receptionist)</h2>
+        <div className="apple-card p-6 space-y-4">
+          <h2 className="apple-section-header">Create staff account</h2>
 
-          {error && <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs p-3 rounded-lg">{error}</div>}
+          {error && <div className="bg-apple-red/10 border border-apple-red/20 text-apple-red text-xs p-3 rounded-apple-md font-medium">{error}</div>}
 
           <form onSubmit={handleCreateStaff} className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Full Name</label>
+              <label className="block apple-caption mb-1 font-medium">Full name</label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Dr. John Doe"
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-sky-500 outline-none"
+                className="w-full apple-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Email</label>
+              <label className="block apple-caption mb-1 font-medium">Email address</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="john@clinic.lk"
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-sky-500 outline-none"
+                className="w-full apple-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Password</label>
+              <label className="block apple-caption mb-1 font-medium">Password</label>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-sky-500 outline-none"
+                className="w-full apple-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Role</label>
+              <label className="block apple-caption mb-1 font-medium">System role</label>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-sky-500 outline-none"
+                className="w-full apple-input"
               >
                 <option value="DOCTOR">DOCTOR</option>
                 <option value="RECEPTIONIST">RECEPTIONIST</option>
@@ -155,11 +155,11 @@ export default function StaffPage() {
             </div>
 
             <div>
-              <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Assign Branch</label>
+              <label className="block apple-caption mb-1 font-medium">Assign branch</label>
               <select
                 value={branchId}
                 onChange={(e) => setBranchId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-sky-500 outline-none"
+                className="w-full apple-input"
               >
                 <option value="">Unassigned / All Branches</option>
                 {branches.map((b) => (
@@ -171,13 +171,13 @@ export default function StaffPage() {
             </div>
 
             <div>
-              <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Phone Number</label>
+              <label className="block apple-caption mb-1 font-medium">Phone number</label>
               <input
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+94..."
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-sky-500 outline-none"
+                className="w-full apple-input"
               />
             </div>
 
@@ -185,7 +185,7 @@ export default function StaffPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-sky-600 hover:bg-sky-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition disabled:opacity-50"
+                className="apple-btn-primary disabled:opacity-50"
               >
                 {loading ? 'Registering...' : '+ Create Account'}
               </button>
@@ -193,50 +193,48 @@ export default function StaffPage() {
           </form>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">Staff Accounts</h2>
+        <div className="apple-card p-6 space-y-4">
+          <h2 className="apple-section-header">Registered staff accounts</h2>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-slate-800/50 uppercase text-slate-400 font-semibold border-b border-slate-800">
-                <tr>
-                  <th className="p-3">Staff Name</th>
-                  <th className="p-3">Email</th>
-                  <th className="p-3">Role</th>
-                  <th className="p-3">Branch</th>
-                  <th className="p-3">Status</th>
-                  <th className="p-3 text-right">Actions</th>
+            <table className="w-full text-left text-sm text-apple-text">
+              <thead>
+                <tr className="border-b border-apple-border text-apple-muted text-xs font-semibold">
+                  <th className="py-3.5 px-4">Staff Name</th>
+                  <th className="py-3.5 px-4">Email</th>
+                  <th className="py-3.5 px-4">Role</th>
+                  <th className="py-3.5 px-4">Branch</th>
+                  <th className="py-3.5 px-4">Status</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y divide-apple-border">
                 {staffList.map((member) => (
-                  <tr key={member.id} className="hover:bg-slate-800/30">
-                    <td className="p-3 font-medium text-slate-100">{member.name}</td>
-                    <td className="p-3 text-slate-400">{member.email}</td>
-                    <td className="p-3">
-                      <span className="bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded font-mono text-[10px]">
-                        {member.role}
+                  <tr key={member.id} className="hover:bg-apple-secondary/40 transition-colors">
+                    <td className="py-3.5 px-4 font-semibold text-apple-text">{member.name}</td>
+                    <td className="py-3.5 px-4 text-apple-muted">{member.email}</td>
+                    <td className="py-3.5 px-4">
+                      <span className="apple-pill apple-pill-blue">
+                        {member.role.replace('_', ' ')}
                       </span>
                     </td>
-                    <td className="p-3 text-slate-400">{member.branch?.name || 'All Branches'}</td>
-                    <td className="p-3">
+                    <td className="py-3.5 px-4 text-apple-muted">{member.branch?.name || 'All Branches'}</td>
+                    <td className="py-3.5 px-4">
                       {member.isActive ? (
-                        <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded text-[10px]">
+                        <span className="apple-pill apple-pill-green">
                           Active
                         </span>
                       ) : (
-                        <span className="bg-rose-500/10 text-rose-400 border border-rose-500/20 px-2 py-0.5 rounded text-[10px]">
+                        <span className="apple-pill apple-pill-red">
                           Inactive
                         </span>
                       )}
                     </td>
-                    <td className="p-3 text-right">
+                    <td className="py-3.5 px-4 text-right">
                       <button
                         onClick={() => handleToggleActive(member)}
-                        className={`text-[11px] font-medium px-2.5 py-1 rounded transition border ${
-                          member.isActive
-                            ? 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border-rose-500/30'
-                            : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                        className={`apple-btn-secondary text-xs py-1 px-3 ${
+                          member.isActive ? 'text-apple-red hover:bg-apple-red/10' : 'text-apple-green hover:bg-apple-green/10'
                         }`}
                       >
                         {member.isActive ? 'Deactivate' : 'Activate'}

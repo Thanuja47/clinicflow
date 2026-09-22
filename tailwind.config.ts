@@ -7,11 +7,31 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        apple: {
+          bg: "var(--bg-grouped)",
+          surface: "var(--bg-surface)",
+          secondary: "var(--bg-surface-secondary)",
+          border: "var(--border-subtle)",
+          text: "var(--text-primary)",
+          muted: "var(--text-secondary)",
+          tertiary: "var(--text-tertiary)",
+          blue: "var(--accent-blue)",
+          green: "var(--accent-green)",
+          orange: "var(--accent-orange)",
+          red: "var(--accent-red)",
+          purple: "var(--accent-purple)",
+        },
+      },
+      borderRadius: {
+        'apple-sm': '8px',
+        'apple-md': '10px',
+        'apple-lg': '12px',
+        'apple-xl': '16px',
+        'apple-pill': '20px',
       },
     },
   },

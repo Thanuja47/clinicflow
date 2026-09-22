@@ -4,7 +4,10 @@ import {
   Plus,
   Search,
   CheckCircle2,
-  Printer
+  Printer,
+  Receipt,
+  DollarSign,
+  AlertCircle
 } from 'lucide-react';
 
 interface Patient {
@@ -177,14 +180,14 @@ export default function BillingPage() {
     .reduce((sum, i) => sum + i.totalAmount, 0);
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
-            Billing & Invoicing Desk
+          <h1 className="apple-title flex items-center gap-2">
+            Billing & Receipts
           </h1>
-          <p className="text-slate-400 text-sm">Issue receipts, collect payments, and track clinic revenue</p>
+          <p className="apple-caption mt-1">Issue receipts, collect payments, and track clinic revenue</p>
         </div>
         <button
           onClick={() => {
@@ -192,15 +195,15 @@ export default function BillingPage() {
             setErrorMsg('');
             setSuccessMsg('');
           }}
-          className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          className="apple-btn-primary flex items-center gap-2 shadow-sm"
         >
           <Plus className="w-4 h-4" /> Create New Invoice
         </button>
       </div>
 
-      {/* Success / Error Alerts */}
+      {/* Success Alert */}
       {successMsg && (
-        <div className="p-4 bg-emerald-950/60 border border-emerald-500/30 rounded-xl text-emerald-400 text-sm flex items-center gap-3">
+        <div className="p-4 bg-apple-green/10 border border-apple-green/20 rounded-apple-lg text-apple-green text-sm flex items-center gap-3 font-medium">
           <CheckCircle2 className="w-5 h-5 shrink-0" />
           <span>{successMsg}</span>
         </div>
@@ -208,45 +211,56 @@ export default function BillingPage() {
 
       {/* Revenue Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <div className="text-xs text-slate-400 font-medium">Total Collected (Paid)</div>
-          <div className="text-2xl font-bold text-emerald-400 mt-1">
+        <div className="apple-card p-5 space-y-2">
+          <div className="apple-caption font-medium text-apple-green flex items-center justify-between">
+            <span>Total collected (Paid)</span>
+            <DollarSign className="w-4 h-4 text-apple-green" />
+          </div>
+          <div className="text-2xl font-bold text-apple-text">
             LKR {totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <div className="text-xs text-amber-400 font-medium">Pending Unpaid Invoices</div>
-          <div className="text-2xl font-bold text-amber-400 mt-1">
+
+        <div className="apple-card p-5 space-y-2">
+          <div className="apple-caption font-medium text-apple-orange flex items-center justify-between">
+            <span>Pending unpaid invoices</span>
+            <AlertCircle className="w-4 h-4 text-apple-orange" />
+          </div>
+          <div className="text-2xl font-bold text-apple-text">
             LKR {pendingRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}
           </div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
-          <div className="text-xs text-blue-400 font-medium">Total Invoices Issued</div>
-          <div className="text-2xl font-bold text-blue-400 mt-1">{invoices.length}</div>
+
+        <div className="apple-card p-5 space-y-2">
+          <div className="apple-caption font-medium text-apple-blue flex items-center justify-between">
+            <span>Total invoices issued</span>
+            <Receipt className="w-4 h-4 text-apple-blue" />
+          </div>
+          <div className="text-2xl font-bold text-apple-text">{invoices.length}</div>
         </div>
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-wrap gap-4 items-center justify-between">
+      <div className="apple-card p-4 flex flex-wrap gap-4 items-center justify-between">
         <div className="relative flex-1 min-w-[240px]">
-          <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3 top-3 text-apple-muted" />
           <input
             type="text"
-            placeholder="Search by Patient Name or Phone..."
+            placeholder="Search patient name or phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+            className="w-full apple-input pl-9"
           />
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-sm text-slate-400">Payment Status:</span>
+          <span className="apple-caption">Payment status:</span>
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+            className="apple-input text-xs"
           >
-            <option value="">All Statuses</option>
+            <option value="">All statuses</option>
             <option value="PAID">Paid</option>
             <option value="UNPAID">Unpaid</option>
           </select>
@@ -254,54 +268,52 @@ export default function BillingPage() {
       </div>
 
       {/* Invoice Directory Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+      <div className="apple-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-slate-300">
-            <thead className="bg-slate-950 text-slate-400 text-xs uppercase font-semibold border-b border-slate-800">
-              <tr>
-                <th className="px-6 py-4">Receipt #</th>
-                <th className="px-6 py-4">Date</th>
-                <th className="px-6 py-4">Patient</th>
-                <th className="px-6 py-4">Fee Breakdown</th>
-                <th className="px-6 py-4">Total Amount</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+          <table className="w-full text-left text-sm text-apple-text">
+            <thead>
+              <tr className="border-b border-apple-border text-apple-muted text-xs font-semibold">
+                <th className="px-6 py-3.5">Receipt #</th>
+                <th className="px-6 py-3.5">Date</th>
+                <th className="px-6 py-3.5">Patient</th>
+                <th className="px-6 py-3.5">Fee Breakdown</th>
+                <th className="px-6 py-3.5">Total Amount</th>
+                <th className="px-6 py-3.5">Status</th>
+                <th className="px-6 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-apple-border">
               {invoices.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={7} className="px-6 py-8 text-center apple-caption">
                     No invoices found.
                   </td>
                 </tr>
               ) : (
                 invoices.map((inv) => (
-                  <tr key={inv.id} className="hover:bg-slate-800/50 transition-colors">
-                    <td className="px-6 py-4 font-mono text-xs font-bold text-slate-300">
+                  <tr key={inv.id} className="hover:bg-apple-secondary/40 transition-colors">
+                    <td className="px-6 py-4 font-mono text-xs font-bold text-apple-text">
                       #{inv.id.slice(0, 8).toUpperCase()}
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-400">
+                    <td className="px-6 py-4 text-xs text-apple-muted">
                       {new Date(inv.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-semibold text-slate-100">{inv.patient.fullName}</div>
-                      <div className="text-xs text-slate-400">{inv.patient.phone}</div>
+                      <div className="font-semibold text-apple-text">{inv.patient.fullName}</div>
+                      <div className="text-xs text-apple-muted">{inv.patient.phone}</div>
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-400">
+                    <td className="px-6 py-4 text-xs text-apple-muted space-y-0.5">
                       <div>Doctor: LKR {inv.consultationFee}</div>
                       {inv.labCharges > 0 && <div>Lab: LKR {inv.labCharges}</div>}
                       {inv.otherCharges > 0 && <div>Other: LKR {inv.otherCharges}</div>}
                     </td>
-                    <td className="px-6 py-4 font-mono font-bold text-slate-100 text-base">
+                    <td className="px-6 py-4 font-mono font-bold text-apple-text text-base">
                       LKR {inv.totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                          inv.status === 'PAID'
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                        className={`apple-pill ${
+                          inv.status === 'PAID' ? 'apple-pill-green' : 'apple-pill-red'
                         }`}
                       >
                         {inv.status}
@@ -312,14 +324,14 @@ export default function BillingPage() {
                         {inv.status === 'UNPAID' && (
                           <button
                             onClick={() => updateInvoiceStatus(inv.id, 'PAID')}
-                            className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                            className="apple-btn-secondary text-xs py-1 px-3 text-apple-green"
                           >
                             Mark Paid
                           </button>
                         )}
                         <button
                           onClick={() => printReceipt(inv)}
-                          className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors border border-slate-700"
+                          className="apple-btn-secondary text-xs py-1 px-3 flex items-center gap-1"
                         >
                           <Printer className="w-3.5 h-3.5" /> Print Receipt
                         </button>
@@ -333,58 +345,58 @@ export default function BillingPage() {
         </div>
       </div>
 
-      {/* Create Invoice Modal */}
+      {/* APPLE 16PX BACKDROP-BLUR MODAL */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg overflow-hidden shadow-2xl">
-            <div className="p-6 border-b border-slate-800 flex justify-between items-center">
-              <h2 className="text-lg font-semibold text-slate-100">Create New Invoice</h2>
+        <div className="fixed inset-0 apple-modal-overlay flex items-center justify-center p-4 z-50 transition-all duration-200">
+          <div className="apple-modal-card w-full max-w-lg overflow-hidden shadow-2xl p-6 space-y-5">
+            <div className="flex justify-between items-center border-b border-apple-border pb-3">
+              <h2 className="apple-section-header">Create New Invoice</h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-slate-400 hover:text-slate-200 text-sm"
+                className="text-apple-muted hover:text-apple-text text-sm font-semibold p-1"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleCreateInvoice} className="p-6 space-y-4">
+            <form onSubmit={handleCreateInvoice} className="space-y-4">
               {errorMsg && (
-                <div className="p-3 bg-rose-950/60 border border-rose-500/30 rounded-lg text-rose-400 text-sm">
+                <div className="p-3 bg-apple-red/10 border border-apple-red/20 rounded-apple-md text-apple-red text-xs font-medium">
                   {errorMsg}
                 </div>
               )}
 
               {/* Patient Selector */}
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase mb-2">
-                  Select Patient *
+                <label className="block apple-caption mb-1 font-medium">
+                  Select patient *
                 </label>
                 {selectedPatient ? (
-                  <div className="flex items-center justify-between p-3 bg-slate-800 border border-emerald-500/40 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-apple-secondary border border-apple-green/40 rounded-apple-md">
                     <div>
-                      <div className="font-medium text-slate-100">{selectedPatient.fullName}</div>
-                      <div className="text-xs text-slate-400">{selectedPatient.phone}</div>
+                      <div className="font-semibold text-apple-text text-sm">{selectedPatient.fullName}</div>
+                      <div className="text-xs text-apple-muted">{selectedPatient.phone}</div>
                     </div>
                     <button
                       type="button"
                       onClick={() => setSelectedPatient(null)}
-                      className="text-xs text-rose-400 hover:underline"
+                      className="text-xs text-apple-red font-medium hover:underline"
                     >
                       Change
                     </button>
                   </div>
                 ) : (
                   <div className="relative">
-                    <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                    <Search className="w-4 h-4 absolute left-3 top-3 text-apple-muted" />
                     <input
                       type="text"
-                      placeholder="Search patient by Name or Phone..."
+                      placeholder="Search patient name or phone..."
                       value={patientSearch}
                       onChange={(e) => setPatientSearch(e.target.value)}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                      className="w-full apple-input pl-9"
                     />
                     {patientResults.length > 0 && (
-                      <div className="absolute z-10 w-full bg-slate-800 border border-slate-700 rounded-lg mt-1 max-h-48 overflow-y-auto shadow-xl">
+                      <div className="absolute z-10 w-full bg-apple-surface border border-apple-border rounded-apple-md mt-1 max-h-48 overflow-y-auto shadow-xl divide-y divide-apple-border">
                         {patientResults.map((p) => (
                           <button
                             key={p.id}
@@ -394,10 +406,10 @@ export default function BillingPage() {
                               setPatientResults([]);
                               setPatientSearch('');
                             }}
-                            className="w-full text-left p-3 hover:bg-slate-700/50 border-b border-slate-700/50 last:border-0"
+                            className="w-full text-left p-3 hover:bg-apple-secondary/60 transition-colors"
                           >
-                            <div className="font-medium text-slate-200 text-sm">{p.fullName}</div>
-                            <div className="text-xs text-slate-400">{p.phone}</div>
+                            <div className="font-semibold text-apple-text text-sm">{p.fullName}</div>
+                            <div className="text-xs text-apple-muted">{p.phone}</div>
                           </button>
                         ))}
                       </div>
@@ -409,59 +421,59 @@ export default function BillingPage() {
               {/* Charges Input */}
               <div className="space-y-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">
-                    Doctor Consultation Fee (LKR)
+                  <label className="block apple-caption mb-1 font-medium">
+                    Doctor consultation fee (LKR)
                   </label>
                   <input
                     type="number"
                     value={consultationFee}
                     onChange={(e) => setConsultationFee(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                    className="w-full apple-input"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">
-                    Lab Test Charges (LKR)
+                  <label className="block apple-caption mb-1 font-medium">
+                    Lab test charges (LKR)
                   </label>
                   <input
                     type="number"
                     value={labCharges}
                     onChange={(e) => setLabCharges(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                    className="w-full apple-input"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">
-                    Other / Pharmacy Charges (LKR)
+                  <label className="block apple-caption mb-1 font-medium">
+                    Other / Pharmacy charges (LKR)
                   </label>
                   <input
                     type="number"
                     value={otherCharges}
                     onChange={(e) => setOtherCharges(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                    className="w-full apple-input"
                   />
                 </div>
               </div>
 
               {/* Calculated Total Display */}
-              <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl flex justify-between items-center">
-                <span className="text-sm font-semibold text-slate-300">TOTAL RECEIPT AMOUNT:</span>
-                <span className="text-xl font-mono font-bold text-emerald-400">
+              <div className="p-4 bg-apple-secondary border border-apple-border rounded-apple-md flex justify-between items-center">
+                <span className="apple-caption font-semibold">Total invoice amount:</span>
+                <span className="text-lg font-mono font-bold text-apple-green">
                   LKR {calculatedTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
               {/* Payment Status Option */}
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase mb-2">
-                  Payment Status
+                <label className="block apple-caption mb-1 font-medium">
+                  Payment status
                 </label>
                 <select
                   value={paymentStatus}
                   onChange={(e) => setPaymentStatus(e.target.value as 'UNPAID' | 'PAID' | 'PARTIAL')}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full apple-input"
                 >
                   <option value="PAID">Paid (Cash/Card Received)</option>
                   <option value="UNPAID">Unpaid (Pending)</option>
@@ -472,16 +484,16 @@ export default function BillingPage() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 text-sm font-medium hover:bg-slate-800"
+                  className="apple-btn-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium transition-colors disabled:opacity-50"
+                  className="apple-btn-primary disabled:opacity-50"
                 >
-                  {loading ? 'Generating...' : 'Issue Invoice & Receipt'}
+                  {loading ? 'Generating...' : 'Issue Invoice'}
                 </button>
               </div>
             </form>

@@ -55,15 +55,15 @@ export default function SettingsPage() {
       <Topbar title="Clinic Settings" userName="Admin" />
 
       <div className="p-6 space-y-6 max-w-2xl">
-        <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">General Clinic Profile</h2>
+        <div className="apple-card p-6 space-y-4">
+          <h2 className="apple-section-header">General clinic profile</h2>
 
           {status && (
             <div
-              className={`text-xs p-3 rounded-lg border ${
+              className={`text-xs p-3 rounded-apple-md font-medium border ${
                 status.type === 'success'
-                  ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-                  : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                  ? 'bg-apple-green/10 border-apple-green/20 text-apple-green'
+                  : 'bg-apple-red/10 border-apple-red/20 text-apple-red'
               }`}
             >
               {status.text}
@@ -72,54 +72,56 @@ export default function SettingsPage() {
 
           <form onSubmit={handleUpdate} className="space-y-4">
             <div>
-              <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Clinic Name</label>
+              <label className="block apple-caption mb-1 font-medium">Clinic name</label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-sky-500 outline-none"
+                className="w-full apple-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Address</label>
+              <label className="block apple-caption mb-1 font-medium">Address</label>
               <input
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-sky-500 outline-none"
+                className="w-full apple-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Phone Number</label>
+              <label className="block apple-caption mb-1 font-medium">Phone number</label>
               <input
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-sky-500 outline-none"
+                className="w-full apple-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs uppercase text-slate-400 font-semibold mb-1">Logo Image URL</label>
+              <label className="block apple-caption mb-1 font-medium">Logo image URL</label>
               <input
                 type="text"
                 value={logoUrl}
                 onChange={(e) => setLogoUrl(e.target.value)}
                 placeholder="https://..."
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm focus:border-sky-500 outline-none"
+                className="w-full apple-input"
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="bg-sky-600 hover:bg-sky-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition disabled:opacity-50"
-            >
-              {loading ? 'Saving...' : 'Save Settings'}
-            </button>
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="apple-btn-primary disabled:opacity-50"
+              >
+                {loading ? 'Saving...' : 'Save Settings'}
+              </button>
+            </div>
           </form>
         </div>
       </div>

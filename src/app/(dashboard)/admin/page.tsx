@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import { getSessionUser } from '@/lib/session';
 import { prisma } from '@/lib/prisma';
 import { Topbar } from '@/components/layout/Topbar';
+import { Building2, Users, UserCheck, Calendar } from 'lucide-react';
 
 export default async function AdminOverviewPage() {
   const session = getSessionUser();
@@ -46,51 +47,76 @@ export default async function AdminOverviewPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Topbar title="Clinic Administration Overview" userName={session.name} />
+      <Topbar title="Clinic Overview" userName={session.name} />
 
       <div className="p-6 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Branches</span>
-            <p className="text-3xl font-bold text-sky-400 mt-2">{branchesCount}</p>
+        {/* KPI Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="apple-card p-5 space-y-3">
+            <div className="flex items-center justify-between text-apple-muted">
+              <span className="apple-caption">Active branches</span>
+              <div className="w-8 h-8 rounded-apple-sm bg-apple-blue/10 text-apple-blue flex items-center justify-center">
+                <Building2 className="w-4 h-4" />
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-apple-text">{branchesCount}</p>
           </div>
-          <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Staff</span>
-            <p className="text-3xl font-bold text-emerald-400 mt-2">{staffCount}</p>
+
+          <div className="apple-card p-5 space-y-3">
+            <div className="flex items-center justify-between text-apple-muted">
+              <span className="apple-caption">Total staff</span>
+              <div className="w-8 h-8 rounded-apple-sm bg-apple-green/10 text-apple-green flex items-center justify-center">
+                <Users className="w-4 h-4" />
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-apple-text">{staffCount}</p>
           </div>
-          <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Registered Patients</span>
-            <p className="text-3xl font-bold text-indigo-400 mt-2">{patientsCount}</p>
+
+          <div className="apple-card p-5 space-y-3">
+            <div className="flex items-center justify-between text-apple-muted">
+              <span className="apple-caption">Registered patients</span>
+              <div className="w-8 h-8 rounded-apple-sm bg-apple-purple/10 text-apple-purple flex items-center justify-center">
+                <UserCheck className="w-4 h-4" />
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-apple-text">{patientsCount}</p>
           </div>
-          <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Today&apos;s Appointments</span>
-            <p className="text-3xl font-bold text-amber-400 mt-2">{todayAppointmentsCount}</p>
+
+          <div className="apple-card p-5 space-y-3">
+            <div className="flex items-center justify-between text-apple-muted">
+              <span className="apple-caption">Today&apos;s appointments</span>
+              <div className="w-8 h-8 rounded-apple-sm bg-apple-orange/10 text-apple-orange flex items-center justify-center">
+                <Calendar className="w-4 h-4" />
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-apple-text">{todayAppointmentsCount}</p>
           </div>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">Recently Added Staff Members</h2>
+        {/* Recent Staff Table */}
+        <div className="apple-card p-6 space-y-4">
+          <h2 className="apple-section-header">Recently added staff members</h2>
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-slate-800/50 uppercase text-slate-400 font-semibold border-b border-slate-800">
-                <tr>
-                  <th className="p-3">Name</th>
-                  <th className="p-3">Email</th>
-                  <th className="p-3">Role</th>
-                  <th className="p-3">Joined Date</th>
+            <table className="w-full text-left text-sm text-apple-text">
+              <thead>
+                <tr className="border-b border-apple-border text-apple-muted text-xs font-semibold">
+                  <th className="py-3 px-4">Name</th>
+                  <th className="py-3 px-4">Email</th>
+                  <th className="py-3 px-4">Role</th>
+                  <th className="py-3 px-4">Joined Date</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y divide-apple-border">
                 {recentStaff.map((member) => (
-                  <tr key={member.id} className="hover:bg-slate-800/30">
-                    <td className="p-3 font-medium text-slate-100">{member.name}</td>
-                    <td className="p-3 text-slate-400">{member.email}</td>
-                    <td className="p-3">
-                      <span className="bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded font-mono text-[10px]">
-                        {member.role}
+                  <tr key={member.id} className="hover:bg-apple-secondary/50 transition-colors">
+                    <td className="py-3.5 px-4 font-semibold text-apple-text">{member.name}</td>
+                    <td className="py-3.5 px-4 text-apple-muted">{member.email}</td>
+                    <td className="py-3.5 px-4">
+                      <span className="apple-pill apple-pill-blue">
+                        {member.role.replace('_', ' ')}
                       </span>
                     </td>
-                    <td className="p-3 text-slate-400">{new Date(member.createdAt).toLocaleDateString()}</td>
+                    <td className="py-3.5 px-4 text-apple-muted">{new Date(member.createdAt).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>
