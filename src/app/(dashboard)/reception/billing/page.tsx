@@ -17,6 +17,17 @@ interface Patient {
   nic?: string;
 }
 
+interface Doctor {
+  id: string;
+  name: string;
+  branch?: { id: string; name: string } | null;
+}
+
+interface Branch {
+  id: string;
+  name: string;
+}
+
 interface Invoice {
   id: string;
   consultationFee: number;
@@ -50,6 +61,12 @@ export default function BillingPage() {
   const [labCharges, setLabCharges] = useState('0');
   const [otherCharges, setOtherCharges] = useState('0');
   const [paymentStatus, setPaymentStatus] = useState<'UNPAID' | 'PAID' | 'PARTIAL'>('PAID');
+
+  // Walk-in context: doctor + branch (required for auto-appointment creation)
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [selectedDoctorId, setSelectedDoctorId] = useState('');
+  const [selectedBranchId, setSelectedBranchId] = useState('');
 
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -92,6 +109,19 @@ export default function BillingPage() {
     return () => clearTimeout(timer);
   }, [patientSearch]);
 
+  // Fetch doctors and branches when modal opens
+  useEffect(() => {
+    if (!showModal) return;
+    fetch('/api/staff?role=DOCTOR')
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data)) setDoctors(data); })
+      .catch(console.error);
+    fetch('/api/branches')
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data)) setBranches(data); })
+      .catch(console.error);
+  }, [showModal]);
+
   async function handleCreateInvoice(e: React.FormEvent) {
     e.preventDefault();
     if (!selectedPatient) {
@@ -113,6 +143,8 @@ export default function BillingPage() {
           labCharges: parseFloat(labCharges) || 0,
           otherCharges: parseFloat(otherCharges) || 0,
           status: paymentStatus,
+          doctorId: selectedDoctorId || undefined,
+          branchId: selectedBranchId || undefined,
         }),
       });
 
@@ -163,6 +195,8 @@ export default function BillingPage() {
     setLabCharges('0');
     setOtherCharges('0');
     setPaymentStatus('PAID');
+    setSelectedDoctorId('');
+    setSelectedBranchId('');
   }
 
   const cFee = parseFloat(consultationFee) || 0;
@@ -416,6 +450,42 @@ export default function BillingPage() {
                     )}
                   </div>
                 )}
+              </div>
+
+              {/* Walk-in Context: Doctor + Branch (auto-creates appointment record) */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block apple-caption mb-1 font-medium">
+                    Consulting doctor *
+                  </label>
+                  <select
+                    value={selectedDoctorId}
+                    onChange={(e) => setSelectedDoctorId(e.target.value)}
+                    required
+                    className="w-full apple-input text-sm"
+                  >
+                    <option value="">Select doctor...</option>
+                    {doctors.map((d) => (
+                      <option key={d.id} value={d.id}>Dr. {d.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block apple-caption mb-1 font-medium">
+                    Branch *
+                  </label>
+                  <select
+                    value={selectedBranchId}
+                    onChange={(e) => setSelectedBranchId(e.target.value)}
+                    required
+                    className="w-full apple-input text-sm"
+                  >
+                    <option value="">Select branch...</option>
+                    {branches.map((b) => (
+                      <option key={b.id} value={b.id}>{b.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Charges Input */}

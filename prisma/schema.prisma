@@ -77,6 +77,8 @@ model Branch {
   clinic       Clinic        @relation(fields: [clinicId], references: [id], onDelete: Cascade)
   users        User[]
   appointments Appointment[]
+
+  @@unique([clinicId, name])
 }
 
 model User {

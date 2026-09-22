@@ -35,10 +35,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Branch name is required' }, { status: 400 });
     }
 
+    // Prevent duplicates — check for same name (case-insensitive) within clinic
+    const existing = await prisma.branch.findFirst({
+      where: {
+        clinicId: session.clinicId,
+        name: { equals: name.trim(), mode: 'insensitive' },
+      },
+    });
+    if (existing) {
+      return NextResponse.json(
+        { error: `A branch named "${name}" already exists. Use a unique name.` },
+        { status: 409 }
+      );
+    }
+
     const branch = await prisma.branch.create({
       data: {
         clinicId: session.clinicId,
-        name,
+        name: name.trim(),
         address,
         phone,
       },

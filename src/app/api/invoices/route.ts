@@ -71,6 +71,9 @@ export async function POST(req: NextRequest) {
       labCharges = 0,
       otherCharges = 0,
       status = 'UNPAID',
+      // Walk-in fields (required when appointmentId is not provided)
+      doctorId,
+      branchId,
     } = body;
 
     if (!patientId) {
@@ -82,11 +85,45 @@ export async function POST(req: NextRequest) {
     const oFee = parseFloat(otherCharges) || 0;
     const totalAmount = cFee + lFee + oFee;
 
+    let resolvedAppointmentId: string | null = appointmentId || null;
+
+    // Walk-in billing: if no existing appointment is linked, auto-create one
+    // so the visit shows up in queue/reports/dashboard stats.
+    if (!resolvedAppointmentId) {
+      if (!doctorId || !branchId) {
+        return NextResponse.json(
+          { error: 'Walk-in billing requires a doctor and branch to be selected.' },
+          { status: 400 }
+        );
+      }
+
+      // Auto-assign queue number: count today's appointments for this clinic + 1
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const todayCount = await prisma.appointment.count({
+        where: { clinicId: user.clinicId, scheduledAt: { gte: todayStart } },
+      });
+
+      const walkInAppt = await prisma.appointment.create({
+        data: {
+          clinicId: user.clinicId,
+          branchId,
+          patientId,
+          doctorId,
+          scheduledAt: new Date(),
+          status: 'CHECKED_IN',
+          queueNumber: todayCount + 1,
+          notes: 'Walk-in billing — auto-created',
+        },
+      });
+      resolvedAppointmentId = walkInAppt.id;
+    }
+
     const invoice = await prisma.invoice.create({
       data: {
         clinicId: user.clinicId,
         patientId,
-        appointmentId: appointmentId || null,
+        appointmentId: resolvedAppointmentId,
         consultationFee: cFee,
         labCharges: lFee,
         otherCharges: oFee,
