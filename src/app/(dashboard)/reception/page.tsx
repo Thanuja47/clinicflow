@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Users, RefreshCw, Stethoscope, CheckCircle, AlertCircle, Activity } from 'lucide-react';
+import { RefreshCw, Stethoscope, CheckCircle, AlertCircle, Activity } from 'lucide-react';
 
 interface QueueItem {
   id: string;
