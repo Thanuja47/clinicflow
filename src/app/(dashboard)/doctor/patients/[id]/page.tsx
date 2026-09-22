@@ -231,18 +231,18 @@ export default function DoctorPatientConsultationPage() {
     : null;
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       {/* Top Navigation */}
       <div className="flex items-center justify-between">
         <Link
           href="/doctor"
-          className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-apple-muted hover:text-apple-text transition-colors font-medium"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Doctor Dashboard
         </Link>
         <button
           onClick={() => window.print()}
-          className="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors border border-slate-700"
+          className="no-print apple-btn-secondary text-xs flex items-center gap-2"
         >
           <Printer className="w-4 h-4" /> Print Prescription
         </button>
@@ -317,23 +317,23 @@ export default function DoctorPatientConsultationPage() {
       {patient && (
         <div className="no-print space-y-6">
           {/* Patient Profile Card */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-wrap items-center justify-between gap-6">
+          <div className="apple-card p-6 flex flex-wrap items-center justify-between gap-6">
             <div className="space-y-1">
-              <span className="text-xs font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="apple-pill apple-pill-blue text-xs font-semibold">
                 PATIENT RECORD
               </span>
-              <h1 className="text-2xl font-bold text-slate-100">{patient.fullName}</h1>
-              <div className="flex flex-wrap gap-4 text-xs text-slate-400 pt-1">
-                <span>Phone: <strong className="text-slate-200">{patient.phone}</strong></span>
-                {patient.nic && <span>NIC: <strong className="text-slate-200">{patient.nic}</strong></span>}
-                {age && <span>Age: <strong className="text-slate-200">{age} yrs</strong></span>}
-                {patient.gender && <span>Gender: <strong className="text-slate-200">{patient.gender}</strong></span>}
+              <h1 className="text-2xl font-bold text-apple-text mt-1">{patient.fullName}</h1>
+              <div className="flex flex-wrap gap-4 text-xs text-apple-muted pt-1">
+                <span>Phone: <strong className="text-apple-text">{patient.phone}</strong></span>
+                {patient.nic && <span>NIC: <strong className="text-apple-text">{patient.nic}</strong></span>}
+                {age && <span>Age: <strong className="text-apple-text">{age} yrs</strong></span>}
+                {patient.gender && <span>Gender: <strong className="text-apple-text">{patient.gender}</strong></span>}
               </div>
             </div>
 
             {patient.allergies && (
-              <div className="bg-amber-950/40 border border-amber-500/30 rounded-xl p-3.5 text-amber-300 text-xs flex items-center gap-2 max-w-md">
-                <AlertCircle className="w-5 h-5 text-amber-400 shrink-0" />
+              <div className="p-3.5 bg-apple-orange/10 border border-apple-orange/20 rounded-apple-md text-apple-orange text-xs flex items-center gap-2 max-w-md font-medium">
+                <AlertCircle className="w-5 h-5 shrink-0 text-apple-orange" />
                 <div>
                   <strong>Allergy Warning:</strong> {patient.allergies}
                 </div>
@@ -342,13 +342,13 @@ export default function DoctorPatientConsultationPage() {
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex border-b border-slate-800 gap-6">
+          <div className="flex border-b border-apple-border gap-6">
             <button
               onClick={() => setActiveTab('consultation')}
               className={`pb-3 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
                 activeTab === 'consultation'
-                  ? 'border-emerald-500 text-emerald-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+                  ? 'border-apple-blue text-apple-blue'
+                  : 'border-transparent text-apple-muted hover:text-apple-text'
               }`}
             >
               <Stethoscope className="w-4 h-4" /> New Consultation & Prescription
@@ -357,8 +357,8 @@ export default function DoctorPatientConsultationPage() {
               onClick={() => setActiveTab('history')}
               className={`pb-3 text-sm font-semibold flex items-center gap-2 border-b-2 transition-colors ${
                 activeTab === 'history'
-                  ? 'border-emerald-500 text-emerald-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+                  ? 'border-apple-blue text-apple-blue'
+                  : 'border-transparent text-apple-muted hover:text-apple-text'
               }`}
             >
               <Clock className="w-4 h-4" /> Medical History ({visits.length})
@@ -367,13 +367,13 @@ export default function DoctorPatientConsultationPage() {
 
           {/* Notifications */}
           {successMsg && (
-            <div className="p-4 bg-emerald-950/60 border border-emerald-500/30 rounded-xl text-emerald-400 text-sm flex items-center gap-3">
+            <div className="p-4 bg-apple-green/10 border border-apple-green/20 rounded-apple-md text-apple-green text-sm flex items-center gap-3 font-medium">
               <CheckCircle2 className="w-5 h-5 shrink-0" />
               <span>{successMsg}</span>
             </div>
           )}
           {errorMsg && (
-            <div className="p-4 bg-rose-950/60 border border-rose-500/30 rounded-xl text-rose-400 text-sm flex items-center gap-3">
+            <div className="p-4 bg-apple-red/10 border border-apple-red/20 rounded-apple-md text-apple-red text-sm flex items-center gap-3 font-medium">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <span>{errorMsg}</span>
             </div>
@@ -383,14 +383,14 @@ export default function DoctorPatientConsultationPage() {
           {activeTab === 'consultation' && (
             <form onSubmit={handleSaveVisit} className="space-y-6">
               {/* Appointment Link Selector */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-                <label className="block text-xs font-semibold text-slate-400 uppercase mb-2">
-                  Select Associated Today&apos;s Appointment *
+              <div className="apple-card p-4 space-y-2">
+                <label className="block apple-caption font-medium">
+                  Select associated today&apos;s appointment *
                 </label>
                 <select
                   value={selectedAppointmentId}
                   onChange={(e) => setSelectedAppointmentId(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full apple-input"
                   required
                 >
                   <option value="">-- Select Appointment --</option>
@@ -404,52 +404,52 @@ export default function DoctorPatientConsultationPage() {
 
               {/* Diagnosis & Clinical Notes */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-2">
-                  <label className="block text-xs font-semibold text-slate-300 uppercase">
-                    Diagnosis / Chief Complaint
+                <div className="apple-card p-5 space-y-2">
+                  <label className="block apple-caption font-medium">
+                    Diagnosis / chief complaint
                   </label>
                   <textarea
                     value={diagnosis}
                     onChange={(e) => setDiagnosis(e.target.value)}
                     placeholder="e.g. Acute Upper Respiratory Tract Infection..."
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                    className="w-full apple-input resize-none"
                     rows={3}
                   />
                 </div>
 
-                <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-2">
-                  <label className="block text-xs font-semibold text-slate-300 uppercase">
-                    Clinical Notes / Vitals
+                <div className="apple-card p-5 space-y-2">
+                  <label className="block apple-caption font-medium">
+                    Clinical notes / vitals
                   </label>
                   <textarea
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="e.g. BP: 120/80, Temp: 98.6°F, Advice rest..."
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                    className="w-full apple-input resize-none"
                     rows={3}
                   />
                 </div>
               </div>
 
               {/* Prescription Builder */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+              <div className="apple-card p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-apple-border pb-4">
                   <div>
-                    <h3 className="text-base font-semibold text-slate-100 flex items-center gap-2">
-                      <FileText className="w-4 h-4 text-emerald-400" /> Prescription Builder (Rx)
+                    <h3 className="text-base font-semibold text-apple-text flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-apple-blue" /> Prescription Builder (Rx)
                     </h3>
-                    <p className="text-xs text-slate-400">Add medications and dosage instructions for patient</p>
+                    <p className="apple-caption mt-0.5">Add medications and dosage instructions for patient</p>
                   </div>
 
                   {/* Template Quick-Load Dropdown */}
                   {templates.length > 0 && (
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-400">Quick Template:</span>
+                      <span className="apple-caption">Quick Template:</span>
                       <select
                         onChange={(e) => {
                           if (e.target.value) loadTemplate(e.target.value);
                         }}
-                        className="bg-slate-800 border border-slate-700 text-xs text-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:border-emerald-500"
+                        className="apple-input text-xs"
                       >
                         <option value="">Load Saved Template...</option>
                         {templates.map((t) => (
@@ -467,7 +467,7 @@ export default function DoctorPatientConsultationPage() {
                   {medicines.map((med, index) => (
                     <div
                       key={index}
-                      className="grid grid-cols-1 sm:grid-cols-12 gap-3 p-3 bg-slate-800/60 border border-slate-700/60 rounded-xl items-center"
+                      className="grid grid-cols-1 sm:grid-cols-12 gap-3 p-3 bg-apple-secondary/50 border border-apple-border rounded-apple-md items-center"
                     >
                       <div className="sm:col-span-4">
                         <input
@@ -475,7 +475,7 @@ export default function DoctorPatientConsultationPage() {
                           placeholder="Medicine Name (e.g. Paracetamol)"
                           value={med.medicineName}
                           onChange={(e) => updateMedicine(index, 'medicineName', e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                          className="w-full apple-input"
                         />
                       </div>
                       <div className="sm:col-span-2">
@@ -484,7 +484,7 @@ export default function DoctorPatientConsultationPage() {
                           placeholder="Dosage (e.g. 500mg)"
                           value={med.dosage}
                           onChange={(e) => updateMedicine(index, 'dosage', e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                          className="w-full apple-input"
                         />
                       </div>
                       <div className="sm:col-span-3">
@@ -493,7 +493,7 @@ export default function DoctorPatientConsultationPage() {
                           placeholder="Instructions (e.g. 1-0-1 after meals)"
                           value={med.instructions}
                           onChange={(e) => updateMedicine(index, 'instructions', e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                          className="w-full apple-input"
                         />
                       </div>
                       <div className="sm:col-span-2">
@@ -502,14 +502,14 @@ export default function DoctorPatientConsultationPage() {
                           placeholder="Duration (e.g. 5 days)"
                           value={med.duration}
                           onChange={(e) => updateMedicine(index, 'duration', e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                          className="w-full apple-input"
                         />
                       </div>
                       <div className="sm:col-span-1 text-right">
                         <button
                           type="button"
                           onClick={() => removeMedicineRow(index)}
-                          className="text-slate-400 hover:text-rose-400 p-1.5 transition-colors"
+                          className="text-apple-muted hover:text-apple-red p-1.5 transition-colors"
                           title="Remove row"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -523,7 +523,7 @@ export default function DoctorPatientConsultationPage() {
                   <button
                     type="button"
                     onClick={addMedicineRow}
-                    className="flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 font-medium bg-emerald-950/40 border border-emerald-500/30 px-3 py-2 rounded-lg transition-colors"
+                    className="apple-btn-secondary text-xs flex items-center gap-1.5 text-apple-blue"
                   >
                     <Plus className="w-3.5 h-3.5" /> Add Medicine Row
                   </button>
@@ -532,18 +532,18 @@ export default function DoctorPatientConsultationPage() {
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
-                      placeholder="Template Name..."
+                      placeholder="Template name..."
                       value={templateName}
                       onChange={(e) => setTemplateName(e.target.value)}
-                      className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500"
+                      className="apple-input text-xs py-1.5"
                     />
                     <button
                       type="button"
                       onClick={handleSaveTemplate}
                       disabled={savingTemplate}
-                      className="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors"
+                      className="apple-btn-secondary text-xs py-1.5 flex items-center gap-1"
                     >
-                      <BookmarkPlus className="w-3.5 h-3.5 text-amber-400" /> Save Template
+                      <BookmarkPlus className="w-3.5 h-3.5 text-apple-orange" /> Save Template
                     </button>
                   </div>
                 </div>
@@ -554,7 +554,7 @@ export default function DoctorPatientConsultationPage() {
                 <button
                   type="submit"
                   disabled={savingVisit}
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-colors shadow-lg shadow-emerald-900/30 disabled:opacity-50 flex items-center gap-2"
+                  className="apple-btn-primary py-3 px-6 text-sm flex items-center gap-2 shadow-lg disabled:opacity-50"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   {savingVisit ? 'Saving Consultation...' : 'Complete Consultation & Save Rx'}
@@ -567,18 +567,18 @@ export default function DoctorPatientConsultationPage() {
           {activeTab === 'history' && (
             <div className="space-y-4">
               {visits.length === 0 ? (
-                <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 text-center text-slate-500 text-sm">
+                <div className="apple-card p-8 text-center apple-caption">
                   No previous consultation records found for this patient.
                 </div>
               ) : (
                 visits.map((v) => (
-                  <div key={v.id} className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div key={v.id} className="apple-card p-5 space-y-4">
+                    <div className="flex items-center justify-between border-b border-apple-border pb-3">
                       <div>
-                        <div className="font-semibold text-slate-100 text-sm">
+                        <div className="font-semibold text-apple-text text-sm">
                           Visit Date: {new Date(v.visitDate).toLocaleDateString()}
                         </div>
-                        <div className="text-xs text-slate-400">
+                        <div className="text-xs text-apple-muted">
                           Dr. {v.doctor?.name || 'Doctor'} {v.appointment ? `· Queue #${v.appointment.queueNumber}` : ''}
                         </div>
                       </div>
@@ -586,26 +586,26 @@ export default function DoctorPatientConsultationPage() {
 
                     {v.diagnosis && (
                       <div>
-                        <div className="text-xs font-semibold text-slate-400 uppercase">Diagnosis</div>
-                        <p className="text-sm text-slate-200 mt-1">{v.diagnosis}</p>
+                        <div className="apple-caption font-semibold">Diagnosis</div>
+                        <p className="text-sm text-apple-text mt-1">{v.diagnosis}</p>
                       </div>
                     )}
 
                     {v.notes && (
                       <div>
-                        <div className="text-xs font-semibold text-slate-400 uppercase">Clinical Notes</div>
-                        <p className="text-sm text-slate-300 mt-1">{v.notes}</p>
+                        <div className="apple-caption font-semibold">Clinical notes</div>
+                        <p className="text-sm text-apple-muted mt-1">{v.notes}</p>
                       </div>
                     )}
 
                     {v.prescriptions && v.prescriptions.length > 0 && (
                       <div>
-                        <div className="text-xs font-semibold text-slate-400 uppercase mb-2">Prescribed Medicines</div>
+                        <div className="apple-caption font-semibold mb-2">Prescribed medicines</div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {v.prescriptions.map((rx) => (
-                            <div key={rx.id} className="p-2.5 bg-slate-800/60 border border-slate-700/60 rounded-lg text-xs">
-                              <div className="font-semibold text-emerald-400">{rx.medicineName} ({rx.dosage})</div>
-                              <div className="text-slate-300 mt-0.5">{rx.instructions} · {rx.duration}</div>
+                            <div key={rx.id} className="p-2.5 bg-apple-secondary/50 border border-apple-border rounded-apple-md text-xs">
+                              <div className="font-semibold text-apple-blue">{rx.medicineName} ({rx.dosage})</div>
+                              <div className="text-apple-muted mt-0.5">{rx.instructions} · {rx.duration}</div>
                             </div>
                           ))}
                         </div>

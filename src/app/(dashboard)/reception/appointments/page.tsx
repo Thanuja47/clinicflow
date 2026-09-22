@@ -173,11 +173,11 @@ export default function AppointmentsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100">Appointments Management</h1>
-          <p className="text-slate-400 text-sm">Schedule and manage patient appointments</p>
+          <h1 className="apple-title">Appointments Management</h1>
+          <p className="apple-caption mt-1">Schedule and manage patient appointments</p>
         </div>
         <button
           onClick={() => {
@@ -185,39 +185,39 @@ export default function AppointmentsPage() {
             setSuccessMsg('');
             setErrorMsg('');
           }}
-          className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          className="apple-btn-primary flex items-center gap-2"
         >
           <Plus className="w-4 h-4" /> Book Appointment
         </button>
       </div>
 
       {successMsg && (
-        <div className="p-4 bg-emerald-950/60 border border-emerald-500/30 rounded-xl text-emerald-400 text-sm flex items-center gap-3">
-          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+        <div className="p-4 bg-apple-green/10 border border-apple-green/20 rounded-apple-lg text-apple-green text-sm flex items-center gap-3 font-medium">
+          <CheckCircle2 className="w-5 h-5 text-apple-green shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
 
       {/* Filter Bar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-wrap gap-4 items-center">
+      <div className="apple-card p-4 flex flex-wrap gap-4 items-center">
         <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-slate-400" />
+          <Calendar className="w-4 h-4 text-apple-muted" />
           <input
             type="date"
             value={filterDate}
             onChange={(e) => setFilterDate(e.target.value)}
-            className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+            className="apple-input text-xs"
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm text-slate-400">Status:</span>
+          <span className="apple-caption">Status:</span>
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500"
+            className="apple-input text-xs"
           >
-            <option value="">All Statuses</option>
+            <option value="">All statuses</option>
             <option value="BOOKED">Booked</option>
             <option value="CHECKED_IN">Checked In</option>
             <option value="IN_PROGRESS">In Progress</option>
@@ -228,51 +228,51 @@ export default function AppointmentsPage() {
       </div>
 
       {/* Appointments List */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+      <div className="apple-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-slate-300">
-            <thead className="bg-slate-950 text-slate-400 text-xs uppercase font-semibold border-b border-slate-800">
-              <tr>
-                <th className="px-6 py-4">Queue #</th>
-                <th className="px-6 py-4">Time</th>
-                <th className="px-6 py-4">Patient</th>
-                <th className="px-6 py-4">Doctor</th>
-                <th className="px-6 py-4">Branch</th>
-                <th className="px-6 py-4">Status</th>
+          <table className="w-full text-left text-sm text-apple-text">
+            <thead>
+              <tr className="border-b border-apple-border text-apple-muted text-xs font-semibold">
+                <th className="px-6 py-3.5">Queue #</th>
+                <th className="px-6 py-3.5">Time</th>
+                <th className="px-6 py-3.5">Patient</th>
+                <th className="px-6 py-3.5">Doctor</th>
+                <th className="px-6 py-3.5">Branch</th>
+                <th className="px-6 py-3.5">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-apple-border">
               {appointments.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={6} className="px-6 py-8 text-center apple-caption">
                     No appointments scheduled for this date.
                   </td>
                 </tr>
               ) : (
                 appointments.map((apt) => (
-                  <tr key={apt.id} className="hover:bg-slate-800/50 transition-colors">
-                    <td className="px-6 py-4 font-mono font-bold text-emerald-400">#{apt.queueNumber}</td>
-                    <td className="px-6 py-4 text-slate-200">
+                  <tr key={apt.id} className="hover:bg-apple-secondary/40 transition-colors">
+                    <td className="px-6 py-4 font-mono font-bold text-apple-blue">#{apt.queueNumber}</td>
+                    <td className="px-6 py-4 text-apple-muted text-xs">
                       {new Date(apt.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-medium text-slate-100">{apt.patient.fullName}</div>
-                      <div className="text-xs text-slate-400">{apt.patient.phone}</div>
+                      <div className="font-semibold text-apple-text">{apt.patient.fullName}</div>
+                      <div className="text-xs text-apple-muted">{apt.patient.phone}</div>
                     </td>
-                    <td className="px-6 py-4 text-slate-300">Dr. {apt.doctor.name}</td>
-                    <td className="px-6 py-4 text-slate-400">{apt.branch.name}</td>
+                    <td className="px-6 py-4 text-apple-text text-xs">Dr. {apt.doctor.name}</td>
+                    <td className="px-6 py-4 text-apple-muted text-xs">{apt.branch.name}</td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        className={`apple-pill ${
                           apt.status === 'BOOKED'
-                            ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                            ? 'apple-pill-blue'
                             : apt.status === 'CHECKED_IN'
-                            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                            ? 'apple-pill-orange'
                             : apt.status === 'IN_PROGRESS'
-                            ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                            ? 'apple-pill-purple'
                             : apt.status === 'COMPLETED'
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                            ? 'apple-pill-green'
+                            : 'apple-pill-red'
                         }`}
                       >
                         {apt.status}
@@ -288,56 +288,56 @@ export default function AppointmentsPage() {
 
       {/* Book Appointment Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl w-full max-w-lg overflow-hidden shadow-2xl">
-            <div className="p-6 border-b border-slate-800 flex justify-between items-center">
-              <h2 className="text-lg font-semibold text-slate-100">Book New Appointment</h2>
+        <div className="fixed inset-0 apple-modal-overlay flex items-center justify-center p-4 z-50">
+          <div className="apple-modal-card w-full max-w-lg overflow-hidden shadow-2xl p-6 space-y-4">
+            <div className="flex justify-between items-center border-b border-apple-border pb-3">
+              <h2 className="apple-section-header">Book New Appointment</h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-slate-400 hover:text-slate-200 text-sm"
+                className="text-apple-muted hover:text-apple-text text-sm font-semibold p-1"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleBookAppointment} className="p-6 space-y-4">
+            <form onSubmit={handleBookAppointment} className="space-y-4">
               {errorMsg && (
-                <div className="p-3 bg-rose-950/60 border border-rose-500/30 rounded-lg text-rose-400 text-sm">
+                <div className="p-3 bg-apple-red/10 border border-apple-red/20 rounded-apple-md text-apple-red text-xs font-medium">
                   {errorMsg}
                 </div>
               )}
 
               {/* Patient Selector */}
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase mb-2">
-                  Select Patient *
+                <label className="block apple-caption mb-1 font-medium">
+                  Select patient *
                 </label>
                 {selectedPatient ? (
-                  <div className="flex items-center justify-between p-3 bg-slate-800 border border-emerald-500/40 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-apple-secondary border border-apple-green/40 rounded-apple-md">
                     <div>
-                      <div className="font-medium text-slate-100">{selectedPatient.fullName}</div>
-                      <div className="text-xs text-slate-400">{selectedPatient.phone} {selectedPatient.nic ? `| NIC: ${selectedPatient.nic}` : ''}</div>
+                      <div className="font-semibold text-apple-text text-sm">{selectedPatient.fullName}</div>
+                      <div className="text-xs text-apple-muted">{selectedPatient.phone} {selectedPatient.nic ? `| NIC: ${selectedPatient.nic}` : ''}</div>
                     </div>
                     <button
                       type="button"
                       onClick={() => setSelectedPatient(null)}
-                      className="text-xs text-rose-400 hover:underline"
+                      className="text-xs text-apple-red font-medium hover:underline"
                     >
                       Change
                     </button>
                   </div>
                 ) : (
                   <div className="relative">
-                    <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                    <Search className="w-4 h-4 absolute left-3 top-3 text-apple-muted" />
                     <input
                       type="text"
-                      placeholder="Search patient by Name, Phone, or NIC..."
+                      placeholder="Search patient by name, phone, or NIC..."
                       value={searchPatient}
                       onChange={(e) => setSearchPatient(e.target.value)}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                      className="w-full apple-input pl-9"
                     />
                     {patientResults.length > 0 && (
-                      <div className="absolute z-10 w-full bg-slate-800 border border-slate-700 rounded-lg mt-1 max-h-48 overflow-y-auto shadow-xl">
+                      <div className="absolute z-10 w-full bg-apple-surface border border-apple-border rounded-apple-md mt-1 max-h-48 overflow-y-auto shadow-xl divide-y divide-apple-border">
                         {patientResults.map((p) => (
                           <button
                             key={p.id}
@@ -347,10 +347,10 @@ export default function AppointmentsPage() {
                               setPatientResults([]);
                               setSearchPatient('');
                             }}
-                            className="w-full text-left p-3 hover:bg-slate-700/50 border-b border-slate-700/50 last:border-0"
+                            className="w-full text-left p-3 hover:bg-apple-secondary/60 transition-colors"
                           >
-                            <div className="font-medium text-slate-200 text-sm">{p.fullName}</div>
-                            <div className="text-xs text-slate-400">{p.phone} {p.nic ? `| NIC: ${p.nic}` : ''}</div>
+                            <div className="font-semibold text-apple-text text-sm">{p.fullName}</div>
+                            <div className="text-xs text-apple-muted">{p.phone} {p.nic ? `| NIC: ${p.nic}` : ''}</div>
                           </button>
                         ))}
                       </div>
@@ -361,13 +361,13 @@ export default function AppointmentsPage() {
 
               {/* Branch Selector */}
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase mb-2">
+                <label className="block apple-caption mb-1 font-medium">
                   Branch *
                 </label>
                 <select
                   value={branchId}
                   onChange={(e) => setBranchId(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full apple-input"
                   required
                 >
                   {branches.map((b) => (
@@ -380,13 +380,13 @@ export default function AppointmentsPage() {
 
               {/* Doctor Selector */}
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase mb-2">
+                <label className="block apple-caption mb-1 font-medium">
                   Doctor *
                 </label>
                 <select
                   value={doctorId}
                   onChange={(e) => setDoctorId(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full apple-input"
                   required
                 >
                   <option value="">-- Select Doctor --</option>
@@ -401,26 +401,26 @@ export default function AppointmentsPage() {
               {/* Date & Time */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase mb-2">
+                  <label className="block apple-caption mb-1 font-medium">
                     Date *
                   </label>
                   <input
                     type="date"
                     value={scheduledDate}
                     onChange={(e) => setScheduledDate(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                    className="w-full apple-input"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase mb-2">
+                  <label className="block apple-caption mb-1 font-medium">
                     Time *
                   </label>
                   <input
                     type="time"
                     value={scheduledTime}
                     onChange={(e) => setScheduledTime(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                    className="w-full apple-input"
                     required
                   />
                 </div>
@@ -428,14 +428,14 @@ export default function AppointmentsPage() {
 
               {/* Notes */}
               <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase mb-2">
-                  Notes (Optional)
+                <label className="block apple-caption mb-1 font-medium">
+                  Notes (optional)
                 </label>
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Reason for visit, symptoms..."
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full apple-input resize-none"
                   rows={2}
                 />
               </div>
@@ -444,14 +444,14 @@ export default function AppointmentsPage() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 text-sm font-medium hover:bg-slate-800"
+                  className="apple-btn-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium transition-colors disabled:opacity-50"
+                  className="apple-btn-primary disabled:opacity-50"
                 >
                   {loading ? 'Booking...' : 'Confirm Booking'}
                 </button>

@@ -106,53 +106,53 @@ export default function LabReportsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       {/* Top Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
+        <h1 className="apple-title flex items-center gap-2">
           Lab Reports Vault
         </h1>
-        <p className="text-slate-400 text-sm">Upload, attach, and view patient diagnostic lab reports (PDF/Images)</p>
+        <p className="apple-caption mt-1">Upload, attach, and view patient diagnostic lab reports (PDF/Images)</p>
       </div>
 
       {/* Upload Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h2 className="text-base font-semibold text-slate-100 flex items-center gap-2">
-          <FileUp className="w-4 h-4 text-emerald-400" /> Upload New Lab Report
+      <div className="apple-card p-6 space-y-4">
+        <h2 className="apple-section-header flex items-center gap-2">
+          <FileUp className="w-4 h-4 text-apple-blue" /> Upload new lab report
         </h2>
 
         <form onSubmit={handleUpload} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           {/* Patient Selector */}
           <div className="space-y-2">
-            <label className="block text-xs font-semibold text-slate-300 uppercase">
-              Select Patient *
+            <label className="block apple-caption font-medium">
+              Select patient *
             </label>
             {selectedPatient ? (
-              <div className="flex items-center justify-between p-3.5 bg-slate-800 border border-emerald-500/40 rounded-xl">
+              <div className="flex items-center justify-between p-3.5 bg-apple-secondary border border-apple-green/40 rounded-apple-md">
                 <div>
-                  <div className="font-semibold text-slate-100">{selectedPatient.fullName}</div>
-                  <div className="text-xs text-slate-400">{selectedPatient.phone} {selectedPatient.nic ? `| NIC: ${selectedPatient.nic}` : ''}</div>
+                  <div className="font-semibold text-apple-text text-sm">{selectedPatient.fullName}</div>
+                  <div className="text-xs text-apple-muted">{selectedPatient.phone} {selectedPatient.nic ? `| NIC: ${selectedPatient.nic}` : ''}</div>
                 </div>
                 <button
                   type="button"
                   onClick={() => setSelectedPatient(null)}
-                  className="text-xs text-rose-400 hover:underline"
+                  className="text-xs text-apple-red font-medium hover:underline"
                 >
                   Change
                 </button>
               </div>
             ) : (
               <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                <Search className="w-4 h-4 absolute left-3 top-3 text-apple-muted" />
                 <input
                   type="text"
-                  placeholder="Search patient by Name, Phone, or NIC..."
+                  placeholder="Search patient by name, phone, or NIC..."
                   value={patientSearch}
                   onChange={(e) => setPatientSearch(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
+                  className="w-full apple-input pl-9"
                 />
                 {patientResults.length > 0 && (
-                  <div className="absolute z-10 w-full bg-slate-800 border border-slate-700 rounded-xl mt-1 max-h-48 overflow-y-auto shadow-xl">
+                  <div className="absolute z-10 w-full bg-apple-surface border border-apple-border rounded-apple-md mt-1 max-h-48 overflow-y-auto shadow-xl divide-y divide-apple-border">
                     {patientResults.map((p) => (
                       <button
                         key={p.id}
@@ -162,10 +162,10 @@ export default function LabReportsPage() {
                           setPatientResults([]);
                           setPatientSearch('');
                         }}
-                        className="w-full text-left p-3 hover:bg-slate-700/50 border-b border-slate-700/50 last:border-0"
+                        className="w-full text-left p-3 hover:bg-apple-secondary/60 transition-colors"
                       >
-                        <div className="font-medium text-slate-200 text-sm">{p.fullName}</div>
-                        <div className="text-xs text-slate-400">{p.phone}</div>
+                        <div className="font-semibold text-apple-text text-sm">{p.fullName}</div>
+                        <div className="text-xs text-apple-muted">{p.phone}</div>
                       </button>
                     ))}
                   </div>
@@ -176,10 +176,10 @@ export default function LabReportsPage() {
 
           {/* File Picker */}
           <div className="space-y-2">
-            <label className="block text-xs font-semibold text-slate-300 uppercase">
-              Attach PDF / Image File *
+            <label className="block apple-caption font-medium">
+              Attach PDF / Image file *
             </label>
-            <div className="border-2 border-dashed border-slate-700 hover:border-emerald-500 rounded-xl p-4 text-center transition-colors bg-slate-800/40">
+            <div className="border-2 border-dashed border-apple-border hover:border-apple-blue rounded-apple-md p-4 text-center transition-colors bg-apple-secondary/30">
               <input
                 type="file"
                 accept=".pdf,image/*"
@@ -190,11 +190,11 @@ export default function LabReportsPage() {
                 id="lab-file-input"
               />
               <label htmlFor="lab-file-input" className="cursor-pointer space-y-1 block">
-                <FileText className="w-8 h-8 mx-auto text-emerald-400" />
-                <span className="text-xs font-medium text-slate-200 block">
+                <FileText className="w-8 h-8 mx-auto text-apple-blue" />
+                <span className="text-xs font-semibold text-apple-text block">
                   {file ? file.name : 'Click to select PDF or image file'}
                 </span>
-                <span className="text-[10px] text-slate-400 block">PDF, PNG, JPG up to 10MB</span>
+                <span className="text-[11px] text-apple-muted block">PDF, PNG, JPG up to 10MB</span>
               </label>
             </div>
           </div>
@@ -202,12 +202,12 @@ export default function LabReportsPage() {
           <div className="md:col-span-2 flex justify-between items-center pt-2">
             <div>
               {successMsg && (
-                <span className="text-xs text-emerald-400 flex items-center gap-1">
+                <span className="text-xs text-apple-green font-medium flex items-center gap-1">
                   <CheckCircle2 className="w-4 h-4" /> {successMsg}
                 </span>
               )}
               {errorMsg && (
-                <span className="text-xs text-rose-400 flex items-center gap-1">
+                <span className="text-xs text-apple-red font-medium flex items-center gap-1">
                   <AlertCircle className="w-4 h-4" /> {errorMsg}
                 </span>
               )}
@@ -215,48 +215,48 @@ export default function LabReportsPage() {
             <button
               type="submit"
               disabled={uploading}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="apple-btn-primary disabled:opacity-50 flex items-center gap-2"
             >
               <FileUp className="w-4 h-4" />
-              {uploading ? 'Uploading to Storage...' : 'Upload & Attach Report'}
+              {uploading ? 'Uploading...' : 'Upload & Attach Report'}
             </button>
           </div>
         </form>
       </div>
 
       {/* Lab Reports Directory Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-        <div className="p-4 border-b border-slate-800 bg-slate-950/50">
-          <h2 className="text-sm font-semibold text-slate-200">Recent Lab Uploads ({reports.length})</h2>
+      <div className="apple-card overflow-hidden">
+        <div className="p-4 border-b border-apple-border bg-apple-secondary/30">
+          <h2 className="text-sm font-semibold text-apple-text">Recent Lab Uploads ({reports.length})</h2>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-slate-300">
-            <thead className="bg-slate-950 text-slate-400 text-xs uppercase font-semibold border-b border-slate-800">
-              <tr>
-                <th className="px-6 py-4">Uploaded Date</th>
-                <th className="px-6 py-4">Patient Name</th>
-                <th className="px-6 py-4">Contact</th>
-                <th className="px-6 py-4 text-right">View / Download</th>
+          <table className="w-full text-left text-sm text-apple-text">
+            <thead>
+              <tr className="border-b border-apple-border text-apple-muted text-xs font-semibold">
+                <th className="px-6 py-3.5">Uploaded Date</th>
+                <th className="px-6 py-3.5">Patient Name</th>
+                <th className="px-6 py-3.5">Contact</th>
+                <th className="px-6 py-3.5 text-right">View / Download</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-apple-border">
               {reports.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-slate-500">
+                  <td colSpan={4} className="px-6 py-8 text-center apple-caption">
                     No lab reports uploaded yet.
                   </td>
                 </tr>
               ) : (
                 reports.map((r) => (
-                  <tr key={r.id} className="hover:bg-slate-800/50 transition-colors">
-                    <td className="px-6 py-4 text-xs text-slate-400">
+                  <tr key={r.id} className="hover:bg-apple-secondary/40 transition-colors">
+                    <td className="px-6 py-4 text-xs text-apple-muted">
                       {new Date(r.uploadedAt).toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-slate-100">
+                    <td className="px-6 py-4 font-semibold text-apple-text">
                       {r.patient.fullName}
                     </td>
-                    <td className="px-6 py-4 text-slate-400 text-xs">
+                    <td className="px-6 py-4 text-apple-muted text-xs">
                       {r.patient.phone}
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -264,7 +264,7 @@ export default function LabReportsPage() {
                         href={r.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-700 transition-colors"
+                        className="apple-btn-secondary text-xs py-1 px-3 text-apple-blue inline-flex items-center gap-1.5"
                       >
                         <ExternalLink className="w-3.5 h-3.5" /> View Report
                       </a>
