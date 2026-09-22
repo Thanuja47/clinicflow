@@ -243,13 +243,13 @@ export default function BillingPage() {
       {/* Filter & Search Bar */}
       <div className="apple-card p-4 flex flex-wrap gap-4 items-center justify-between">
         <div className="relative flex-1 min-w-[240px]">
-          <Search className="w-4 h-4 absolute left-3 top-3 text-apple-muted" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-apple-muted pointer-events-none" />
           <input
             type="text"
             placeholder="Search patient name or phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full apple-input pl-9"
+            className="w-full apple-input apple-input-has-icon"
           />
         </div>
 
@@ -387,13 +387,13 @@ export default function BillingPage() {
                   </div>
                 ) : (
                   <div className="relative">
-                    <Search className="w-4 h-4 absolute left-3 top-3 text-apple-muted" />
+                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-apple-muted pointer-events-none" />
                     <input
                       type="text"
                       placeholder="Search patient name or phone..."
                       value={patientSearch}
                       onChange={(e) => setPatientSearch(e.target.value)}
-                      className="w-full apple-input pl-9"
+                      className="w-full apple-input apple-input-has-icon"
                     />
                     {patientResults.length > 0 && (
                       <div className="absolute z-10 w-full bg-apple-surface border border-apple-border rounded-apple-md mt-1 max-h-48 overflow-y-auto shadow-xl divide-y divide-apple-border">

@@ -54,13 +54,13 @@ export default function PatientsListPage() {
       <div className="p-6 space-y-4">
         <div className="flex items-center justify-between gap-4">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-muted" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-muted pointer-events-none" />
             <input
               type="text"
               placeholder="Search by name, NIC or phone..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full apple-input pl-9"
+              className="w-full apple-input apple-input-has-icon"
             />
           </div>
           <Link

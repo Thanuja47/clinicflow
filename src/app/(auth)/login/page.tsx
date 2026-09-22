@@ -90,14 +90,14 @@ function LoginForm() {
             Email address
           </label>
           <div className="relative">
-            <User className="w-4 h-4 absolute left-3 top-3 text-apple-muted" />
+            <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-apple-muted pointer-events-none" />
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="user@lankacare.lk"
-              className="w-full apple-input pl-9"
+              className="w-full apple-input apple-input-has-icon"
             />
           </div>
         </div>
@@ -107,14 +107,14 @@ function LoginForm() {
             Password
           </label>
           <div className="relative">
-            <Lock className="w-4 h-4 absolute left-3 top-3 text-apple-muted" />
+            <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-apple-muted pointer-events-none" />
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="••••••••"
-              className="w-full apple-input pl-9"
+              className="w-full apple-input apple-input-has-icon"
             />
           </div>
         </div>

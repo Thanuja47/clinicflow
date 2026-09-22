@@ -328,13 +328,13 @@ export default function AppointmentsPage() {
                   </div>
                 ) : (
                   <div className="relative">
-                    <Search className="w-4 h-4 absolute left-3 top-3 text-apple-muted" />
+                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-apple-muted pointer-events-none" />
                     <input
                       type="text"
                       placeholder="Search patient by name, phone, or NIC..."
                       value={searchPatient}
                       onChange={(e) => setSearchPatient(e.target.value)}
-                      className="w-full apple-input pl-9"
+                      className="w-full apple-input apple-input-has-icon"
                     />
                     {patientResults.length > 0 && (
                       <div className="absolute z-10 w-full bg-apple-surface border border-apple-border rounded-apple-md mt-1 max-h-48 overflow-y-auto shadow-xl divide-y divide-apple-border">
