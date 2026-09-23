@@ -13,15 +13,17 @@ export function Topbar({ title, userName }: TopbarProps) {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    // Check initial dark mode state
-    const isDark = document.documentElement.classList.contains('dark') || 
-      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
     
     if (isDark) {
       setTheme('dark');
       document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
     } else {
       setTheme('light');
+      document.documentElement.classList.add('light');
       document.documentElement.classList.remove('dark');
     }
   }, []);
@@ -30,9 +32,11 @@ export function Topbar({ title, userName }: TopbarProps) {
     if (theme === 'light') {
       setTheme('dark');
       document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
       localStorage.setItem('theme', 'dark');
     } else {
       setTheme('light');
+      document.documentElement.classList.add('light');
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
