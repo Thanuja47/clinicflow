@@ -1,6 +1,10 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
+if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET)) {
+  console.warn('CRITICAL SECURITY WARNING: JWT_SECRET or JWT_REFRESH_SECRET is missing in production environment variables.');
+}
+
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-jwt-secret-clinicflow-key';
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-jwt-refresh-secret-clinicflow-key';
 
