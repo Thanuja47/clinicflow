@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LanguageToggle } from '@/components/LanguageToggle';
 import { Sun, Moon } from 'lucide-react';
 
 interface TopbarProps {
@@ -57,8 +56,6 @@ export function Topbar({ title, userName }: TopbarProps) {
         >
           {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
         </button>
-
-        <LanguageToggle />
 
         <div className="text-right pl-2 border-l border-apple-border">
           <p className="text-xs font-semibold text-apple-text">{userName}</p>
