@@ -42,9 +42,9 @@ export function Topbar({ title, userName }: TopbarProps) {
   };
 
   return (
-    <header className="h-16 bg-apple-surface/80 backdrop-blur-md border-b border-apple-border px-6 flex items-center justify-between sticky top-0 z-10 transition-colors duration-200">
+    <header className="h-16 bg-apple-surface/80 backdrop-blur-md border-b border-apple-border pl-16 md:pl-6 pr-4 md:pr-6 flex items-center justify-between sticky top-0 z-10 transition-colors duration-200">
       <div>
-        <h1 className="text-lg font-bold text-apple-text tracking-tight">{title}</h1>
+        <h1 className="text-base md:text-lg font-bold text-apple-text tracking-tight truncate">{title}</h1>
       </div>
 
       <div className="flex items-center gap-3">
