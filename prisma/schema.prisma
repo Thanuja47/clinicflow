@@ -79,6 +79,7 @@ model Branch {
   appointments Appointment[]
 
   @@unique([clinicId, name])
+  @@index([clinicId])
 }
 
 model User {
@@ -99,6 +100,9 @@ model User {
   doctorAppointments    Appointment[]          @relation("DoctorAppointments")
   visits                Visit[]                @relation("DoctorVisits")
   prescriptionTemplates PrescriptionTemplate[]
+
+  @@index([clinicId])
+  @@index([role])
 }
 
 model Patient {
@@ -120,6 +124,11 @@ model Patient {
   invoices         Invoice[]
   labReports       LabReport[]
   notificationLogs NotificationLog[]
+
+  @@index([clinicId])
+  @@index([phone])
+  @@index([nic])
+  @@index([fullName])
 }
 
 model Appointment {
@@ -141,6 +150,11 @@ model Appointment {
   doctor      User              @relation("DoctorAppointments", fields: [doctorId], references: [id], onDelete: Cascade)
   visit       Visit?
   invoices    Invoice[]
+
+  @@index([clinicId, scheduledAt])
+  @@index([doctorId, scheduledAt])
+  @@index([status])
+  @@index([patientId])
 }
 
 model Visit {
@@ -161,6 +175,10 @@ model Visit {
   doctor        User           @relation("DoctorVisits", fields: [doctorId], references: [id], onDelete: Cascade)
   prescriptions Prescription[]
   labReports    LabReport[]
+
+  @@index([clinicId])
+  @@index([patientId])
+  @@index([doctorId])
 }
 
 model Prescription {
@@ -176,6 +194,9 @@ model Prescription {
 
   clinic       Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
   visit        Visit    @relation(fields: [visitId], references: [id], onDelete: Cascade)
+
+  @@index([clinicId])
+  @@index([visitId])
 }
 
 model PrescriptionTemplate {
@@ -189,6 +210,8 @@ model PrescriptionTemplate {
 
   clinic    Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
   doctor    User     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@index([clinicId, doctorId])
 }
 
 model Invoice {
@@ -207,6 +230,9 @@ model Invoice {
   clinic          Clinic        @relation(fields: [clinicId], references: [id], onDelete: Cascade)
   patient         Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
   appointment     Appointment?  @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+
+  @@index([clinicId, createdAt])
+  @@index([patientId])
 }
 
 model LabReport {
@@ -220,6 +246,9 @@ model LabReport {
   clinic     Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
   patient    Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
   visit      Visit?   @relation(fields: [visitId], references: [id], onDelete: SetNull)
+
+  @@index([clinicId])
+  @@index([patientId])
 }
 
 model NotificationLog {
@@ -233,4 +262,6 @@ model NotificationLog {
 
   clinic    Clinic              @relation(fields: [clinicId], references: [id], onDelete: Cascade)
   patient   Patient?            @relation(fields: [patientId], references: [id], onDelete: SetNull)
+
+  @@index([clinicId])
 }

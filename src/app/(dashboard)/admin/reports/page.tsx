@@ -1,19 +1,19 @@
 'use client';
+
 import { useState, useEffect, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { Topbar } from '@/components/layout/Topbar';
 import { TrendingUp, Users, Calendar, DollarSign, CheckCircle2, RefreshCw } from 'lucide-react';
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  PieChart,
-  Pie,
-  Cell,
-} from 'recharts';
+
+// Dynamic import for Recharts component (ssr: false) to lazy-load heavy chart library bundle
+const ReportCharts = dynamic(() => import('@/components/charts/ReportCharts'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-64 apple-card p-6 flex items-center justify-center apple-caption">
+      Loading analytics charts...
+    </div>
+  ),
+});
 
 interface ReportSummary {
   totalPatients: number;
@@ -32,7 +32,6 @@ interface DoctorPerf {
 const COLORS = ['#34C759', '#FF9500', '#FF3B30', '#007AFF'];
 
 export default function ReportsAnalyticsPage() {
-  const [mounted, setMounted] = useState(false);
   const [period, setPeriod] = useState<'today' | 'week' | 'month' | 'all'>('month');
   const [summary, setSummary] = useState<ReportSummary>({
     totalPatients: 0,
@@ -44,10 +43,6 @@ export default function ReportsAnalyticsPage() {
   });
   const [doctorPerf, setDoctorPerf] = useState<DoctorPerf[]>([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const fetchReports = useCallback(async () => {
     setLoading(true);
@@ -77,7 +72,7 @@ export default function ReportsAnalyticsPage() {
     <div className="flex flex-col min-h-screen">
       <Topbar title="Analytics & Reports" userName="Admin" />
 
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-6">
         {/* Header Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -99,7 +94,7 @@ export default function ReportsAnalyticsPage() {
 
             <button
               onClick={fetchReports}
-              className="apple-btn-secondary p-2 flex items-center justify-center"
+              className="apple-btn-secondary p-2.5 min-h-[44px] flex items-center justify-center"
               title="Refresh analytics"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -158,72 +153,12 @@ export default function ReportsAnalyticsPage() {
           </div>
         </div>
 
-        {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Doctor Consultation Performance Chart */}
-          <div className="apple-card p-6 space-y-4">
-            <h2 className="apple-section-header flex items-center gap-2">
-              <Users className="w-4 h-4 text-apple-blue" /> Doctor Consultation Volume
-            </h2>
-
-            <div className="h-64 w-full pt-2">
-              {!mounted || doctorPerf.length === 0 ? (
-                <div className="h-full flex items-center justify-center apple-caption">
-                  {!mounted ? 'Loading chart...' : 'No consultation data for this period.'}
-                </div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={doctorPerf}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
-                    <XAxis dataKey="name" stroke="var(--text-secondary)" fontSize={12} />
-                    <YAxis stroke="var(--text-secondary)" fontSize={12} />
-                    <Tooltip
-                      contentStyle={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-subtle)', borderRadius: '10px' }}
-                      itemStyle={{ color: 'var(--accent-blue)' }}
-                    />
-                    <Bar dataKey="visits" fill="#007AFF" radius={[6, 6, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-          </div>
-
-          {/* Appointment Status Breakdown Chart */}
-          <div className="apple-card p-6 space-y-4">
-            <h2 className="apple-section-header flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-apple-purple" /> Appointment Status Distribution
-            </h2>
-
-            <div className="h-64 w-full flex items-center justify-center">
-              {!mounted || appointmentPieData.length === 0 ? (
-                <div className="apple-caption">
-                  {!mounted ? 'Loading chart...' : 'No appointment data to chart.'}
-                </div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={appointmentPieData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={55}
-                      outerRadius={85}
-                      paddingAngle={4}
-                      dataKey="value"
-                    >
-                      {appointmentPieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-subtle)', borderRadius: '10px' }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-          </div>
-        </div>
+        {/* Dynamic Lazy-Loaded Charts */}
+        <ReportCharts
+          doctorPerf={doctorPerf}
+          appointmentPieData={appointmentPieData}
+          colors={COLORS}
+        />
       </div>
     </div>
   );
